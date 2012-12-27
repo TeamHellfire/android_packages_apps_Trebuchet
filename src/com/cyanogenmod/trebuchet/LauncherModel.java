@@ -401,15 +401,7 @@ public class LauncherModel extends BroadcastReceiver {
         item.cellY = cellY;
         item.spanX = spanX;
         item.spanY = spanY;
-
-        // We store hotseat items in canonical form which is this orientation invariant position
-        // in the hotseat
-        if (context instanceof Launcher && screen < 0 &&
-                container == LauncherSettings.Favorites.CONTAINER_HOTSEAT) {
-            item.screen = ((Launcher) context).getHotseat().getOrderInHotseat(cellX, cellY);
-        } else {
-            item.screen = screen;
-        }
+        item.screen = screen;
 
         final ContentValues values = new ContentValues();
         values.put(LauncherSettings.Favorites.CONTAINER, item.container);
@@ -545,7 +537,6 @@ public class LauncherModel extends BroadcastReceiver {
         item.container = container;
         item.cellX = cellX;
         item.cellY = cellY;
-
         item.screen = screen;
 
         final ContentValues values = new ContentValues();
@@ -1154,13 +1145,13 @@ public class LauncherModel extends BroadcastReceiver {
             if (item.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT) {
                 // We use the last index to refer to the hotseat and the screen as the rank, so
                 // test and update the occupied state accordingly
-                if (occupied[Launcher.MAX_SCREEN_COUNT][item.cellX][0] != null) {
+                if (occupied[Launcher.MAX_SCREEN_COUNT][item.screen][item.cellX] != null) {
                     Log.e(TAG, "Error loading shortcut into hotseat " + item
                         + " into position (" + item.screen + ":" + item.cellX + "," + item.cellY
                         + ") occupied by " + occupied[Launcher.MAX_SCREEN_COUNT][item.screen][0]);
                     return false;
                 } else {
-                    occupied[Launcher.MAX_SCREEN_COUNT][item.cellX][0] = item;
+                    occupied[Launcher.MAX_SCREEN_COUNT][item.screen][item.cellX] = item;
                     return true;
                 }
             } else if (item.container != LauncherSettings.Favorites.CONTAINER_DESKTOP) {

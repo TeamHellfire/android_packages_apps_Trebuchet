@@ -55,7 +55,7 @@ public class Hotseat extends PagedView {
         mHandleScrollIndicator = true;
 
         int hotseatPages = PreferencesProvider.Interface.Dock.getNumberPages();
-        int defaultPage = PreferencesProvider.Interface.Dock.getDefaultPage(hotseatPages / 2);
+        int defaultPage = PreferencesProvider.Interface.Dock.getDefaultPage(0);
 
 
         mCurrentPage = defaultPage;
@@ -114,7 +114,7 @@ public class Hotseat extends PagedView {
         return hasVerticalHotseat() ? (mCellCount - rank - 1) : 0;
     }
     int getScreenFromOrder(int screen) {
-        return hasVerticalHotseat() ? (getChildCount() - screen - 1) : screen;
+        return /*hasVerticalHotseat() ? (getChildCount() - screen - 1) : */screen;
     }
 
     /*
@@ -232,6 +232,10 @@ public class Hotseat extends PagedView {
             CellLayout cl = (CellLayout) getPageAt(i);
             cl.removeAllViewsInLayout();
         }
+    }
+
+    CellLayout getLayout() {
+        return (CellLayout) getPageAt(mCurrentPage);
     }
 
     @Override

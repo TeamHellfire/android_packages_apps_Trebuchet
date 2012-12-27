@@ -661,7 +661,6 @@ public class Workspace extends PagedView
             // of the hotseat in order regardless of which orientation they were added
             y = mLauncher.getHotseat().getCellYFromOrder(x);
             x = mLauncher.getHotseat().getCellXFromOrder(x);
-            screen = mLauncher.getHotseat().getScreenFromOrder(screen);
             layout = (CellLayout) mLauncher.getHotseat().getPageAt(screen);
             child.setOnKeyListener(null);
 
@@ -3205,8 +3204,8 @@ public class Workspace extends PagedView
 
    void mapPointFromSelfToHotseatLayout(Hotseat hotseat, float[] xy) {
        hotseat.getPageAt(hotseat.getNextPage()).getMatrix().invert(mTempInverseMatrix);
-       xy[0] = xy[0] - hotseat.getLeft() - hotseat.getPageAt(hotseat.getNextPage()).getLeft();
-       xy[1] = xy[1] - hotseat.getTop() - hotseat.getPageAt(hotseat.getNextPage()).getTop();
+       xy[0] = xy[0] - hotseat.getLeft();
+       xy[1] = xy[1] - hotseat.getTop();
        mTempInverseMatrix.mapPoints(xy);
    }
 
@@ -3342,7 +3341,7 @@ public class Workspace extends PagedView
             if (mLauncher.getHotseat() != null && !isExternalDragWidget(d)) {
                 mLauncher.getHotseat().getHitRect(r);
                 if (r.contains(d.x, d.y)) {
-                    layout = mLauncher.getHotseat().findMatchingPageForDragOver(d.x, d.y, false);
+                    layout = mLauncher.getHotseat().getLayout();
                 }
             }
             if (layout == null) {
@@ -3363,7 +3362,7 @@ public class Workspace extends PagedView
             if (mLauncher.getHotseat() != null && !isDragWidget(d)) {
                 mLauncher.getHotseat().getHitRect(r);
                 if (r.contains(d.x, d.y)) {
-                    layout = mLauncher.getHotseat().findMatchingPageForDragOver(d.x, d.y, false);
+                    layout = mLauncher.getHotseat().getLayout();
                 }
             }
             if (layout == null) {
