@@ -279,12 +279,12 @@ public class CellLayout extends ViewGroup {
         mForegroundRect = new Rect();
 
         mShortcutsAndWidgets = new ShortcutAndWidgetContainer(context);
-
+/*
         if (!LauncherApplication.isScreenLarge()){
             mCellWidth = (mCellWidth * 4) / mCountX;
             mCellHeight = (mCellHeight * 4) / mCountY;
         }
-
+*/
         mShortcutsAndWidgets.setCellDimensions(mCellWidth, mCellHeight, mWidthGap, mHeightGap);
         addView(mShortcutsAndWidgets);
     }
