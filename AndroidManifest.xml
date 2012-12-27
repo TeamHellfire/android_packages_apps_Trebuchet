@@ -146,7 +146,17 @@
                 <action android:name="android.intent.action.USER_INITIALIZE" />
             </intent-filter>
         </receiver>
-        
+
+        <service android:name="com.cyanogenmod.trebuchet.RocketLauncher"
+            android:label="@string/dream_name"
+            android:exported="true"
+            android:icon="@drawable/ic_launcher_home" >
+            <intent-filter>
+                <action android:name="android.service.dreams.DreamService" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
         <!-- The settings provider contains Home's data, like the workspace favorites -->
         <provider
             android:name="com.cyanogenmod.trebuchet.LauncherProvider"
