@@ -40,7 +40,7 @@
     <com.cyanogenmod.trebuchet.preference.SeekBarDialogPreference android:key="ui_dock_icon_scale"
         android:title="@string/preferences_interface_dock_icon_scale_title"
         android:summary="@string/preferences_interface_dock_icon_scale_summary"
-        launcher:min="80"
+        launcher:min="60"
         launcher:max="100"
         android:defaultValue="@integer/hotseat_item_scale_percentage" />
     <CheckBoxPreference android:key="ui_dock_divider"

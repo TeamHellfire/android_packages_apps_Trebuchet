@@ -26,9 +26,9 @@
             launcher:pickerTitle2="@string/preferences_interface_homescreen_general_grid_columns_title"
             launcher:defaultValue1="@integer/cell_count_x"
             launcher:defaultValue2="@integer/cell_count_y"
-            launcher:max1="7"
+            launcher:max1="10"
             launcher:min1="3"
-            launcher:max2="7"
+            launcher:max2="10"
             launcher:min2="3" />
         <com.cyanogenmod.trebuchet.preference.NumberPickerPreference android:key="ui_homescreen_screens"
             android:title="@string/preferences_interface_homescreen_general_screens_title"
@@ -46,6 +46,12 @@
         <CheckBoxPreference android:key="ui_homescreen_stretch_screens"
             android:title="@string/preferences_interface_homescreen_general_stretch_screens_title"
             android:summary="@string/preferences_interface_homescreen_general_stretch_screens_summary" />
+        <com.cyanogenmod.trebuchet.preference.SeekBarDialogPreference android:key="ui_icon_scale"
+            android:title="@string/preferences_interface_dock_icon_scale_title"
+            android:summary="@string/preferences_interface_homescreen_icon_scale_summary"
+            launcher:min="60"
+            launcher:max="100"
+            android:defaultValue="100" />
         <CheckBoxPreference android:key="ui_homescreen_general_search"
             android:title="@string/preferences_interface_homescreen_general_search_title"
             android:summary="@string/preferences_interface_homescreen_general_search_summary"

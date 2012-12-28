@@ -10,7 +10,7 @@
     <!-- Which default transition effect to use on the AppsCustomize -->
     <string name="config_drawerDefaultTransitionEffect">Stack</string>
     <!-- The alpha of the AppsCustomize bg in spring loaded mode -->
-    <integer name="config_appsCustomizeSpringLoadedBgAlpha">45</integer>
+    <integer name="config_appsCustomizeSpringLoadedBgAlpha">0</integer>
     <integer name="config_workspaceUnshrinkTime">300</integer>
     <!-- Out of 100, the percent to shrink the workspace during spring loaded mode. -->
     <integer name="config_workspaceSpringLoadShrinkPercentage">80</integer>

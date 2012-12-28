@@ -507,11 +507,13 @@ public class Workspace extends PagedView
         setChildrenDrawnWithCacheEnabled(true);
 
         final Resources res = getResources();
+        float childrenScale = PreferencesProvider.Interface.Homescreen.getIconScale(100) / 100f;
 
         LayoutInflater inflater =
                 (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         for (int i = 0; i < mNumberHomescreens; i++) {
             CellLayout screen = (CellLayout) inflater.inflate(R.layout.workspace_screen, null);
+            screen.setChildrenScale(childrenScale);
             if (mStretchScreens) {
                 screen.setCellGaps(-1, -1);
             }

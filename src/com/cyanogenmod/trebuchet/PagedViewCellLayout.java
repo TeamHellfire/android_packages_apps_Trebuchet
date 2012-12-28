@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewDebug;
 import android.view.ViewGroup;
 
+import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
 import com.cyanogenmod.trebuchet.R;
 
 /**
@@ -122,12 +123,19 @@ public class PagedViewCellLayout extends ViewGroup implements Page {
             if (lp.cellHSpan < 0) lp.cellHSpan = mCellCountX;
             if (lp.cellVSpan < 0) lp.cellVSpan = mCellCountY;
 
+            child.setScaleX(getChildrenScale());
+            child.setScaleY(getChildrenScale());
+
             child.setId(childId);
             mChildren.addView(child, index, lp);
 
             return true;
         }
         return false;
+    }
+
+    public float getChildrenScale() {
+        return PreferencesProvider.Interface.Drawer.getIconScale(100) / 100f;
     }
 
     @Override

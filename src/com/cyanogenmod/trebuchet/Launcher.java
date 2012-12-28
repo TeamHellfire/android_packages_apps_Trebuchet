@@ -315,6 +315,7 @@ public final class Launcher extends Activity
     private boolean mHideIconLabels;
     private boolean mAutoRotate;
     private boolean mFullscreenMode;
+    private boolean mDrawerShowWallpaper;
 
     private boolean mWallpaperVisible;
 
@@ -395,6 +396,7 @@ public final class Launcher extends Activity
         mHideIconLabels = PreferencesProvider.Interface.Homescreen.getHideIconLabels();
         mAutoRotate = PreferencesProvider.Interface.General.getAutoRotate(getResources().getBoolean(R.bool.allow_rotation));
         mFullscreenMode = PreferencesProvider.Interface.General.getFullscreenMode();
+        mDrawerShowWallpaper = PreferencesProvider.Interface.Drawer.getDrawerShowWallpaper();
 
         if (PROFILE_STARTUP) {
             android.os.Debug.startMethodTracing(
@@ -949,6 +951,9 @@ public final class Launcher extends Activity
         // Setup AppsCustomize
         mAppsCustomizeTabHost = (AppsCustomizeTabHost)
                 findViewById(R.id.apps_customize_pane);
+        if (mDrawerShowWallpaper) {
+            mAppsCustomizeTabHost.setBackgroundColor(0x00000000);
+        }
         mAppsCustomizeContent = (AppsCustomizePagedView)
                 mAppsCustomizeTabHost.findViewById(R.id.apps_customize_pane_content);
         mAppsCustomizeContent.setup(this, dragController);
@@ -2634,6 +2639,7 @@ public final class Launcher extends Activity
     }
 
     void updateWallpaperVisibility(boolean visible) {
+        if (mDrawerShowWallpaper) return;
         int wpflags = visible && mWallpaperVisible ? WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER : 0;
         int curflags = getWindow().getAttributes().flags
                 & WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
@@ -2773,12 +2779,17 @@ public final class Launcher extends Activity
                     dispatchOnLauncherTransitionStep(toView, t);
                 }
             });
+            final ObjectAnimator alphaAnimOut = ObjectAnimator
+                .ofFloat(fromView, "alpha", 1f, 0f)
+                .setDuration(fadeDuration);
+            alphaAnimOut.setInterpolator(new DecelerateInterpolator(1.5f));
 
             // toView should appear right at the end of the workspace shrink
             // animation
             mStateAnimation = LauncherAnimUtils.createAnimatorSet();
             mStateAnimation.play(scaleAnim).after(startDelay);
             mStateAnimation.play(alphaAnim).after(startDelay);
+            mStateAnimation.play(alphaAnimOut);
 
             mStateAnimation.addListener(new AnimatorListenerAdapter() {
                 boolean animationCancelled = false;
@@ -2786,6 +2797,19 @@ public final class Launcher extends Activity
                 @Override
                 public void onAnimationStart(Animator animation) {
                     updateWallpaperVisibility(true);
+
+                    if (mWorkspace != null && !springLoaded && !LauncherApplication.isScreenLarge()) {
+                        // Hide the workspace scrollbar
+                        mWorkspace.hideScrollingIndicator(true);
+                        hideDockDivider(true);
+                        hideHotseat(true);
+                    }
+
+                    // Hide the search bar
+                    if (mSearchDropTargetBar != null) {
+                        mSearchDropTargetBar.hideSearchBar(false);
+                    }
+
                     // Prepare the position
                     toView.setTranslationX(0.0f);
                     toView.setTranslationY(0.0f);
@@ -2797,18 +2821,8 @@ public final class Launcher extends Activity
                     dispatchOnLauncherTransitionEnd(fromView, animated, false);
                     dispatchOnLauncherTransitionEnd(toView, animated, false);
 
-                    if (mWorkspace != null && !springLoaded && !LauncherApplication.isScreenLarge()) {
-                        // Hide the workspace scrollbar
-                        mWorkspace.hideScrollingIndicator(true);
-                        hideDockDivider();
-                    }
                     if (!animationCancelled) {
                         updateWallpaperVisibility(false);
-                    }
-
-                    // Hide the search bar
-                    if (mSearchDropTargetBar != null) {
-                        mSearchDropTargetBar.hideSearchBar(false);
                     }
                 }
 
@@ -2882,7 +2896,7 @@ public final class Launcher extends Activity
             if (!springLoaded && !LauncherApplication.isScreenLarge()) {
                 // Hide the workspace scrollbar
                 mWorkspace.hideScrollingIndicator(true);
-                hideDockDivider();
+                hideDockDivider(false);
 
                 // Hide the search bar
                 if (mSearchDropTargetBar != null) {
@@ -2955,7 +2969,14 @@ public final class Launcher extends Activity
                 }
             });
 
+            final ObjectAnimator alphaAnimOut = ObjectAnimator
+                .ofFloat(toView, "alpha", 0f, 1f)
+                .setDuration(fadeOutDuration);
+            alphaAnimOut.setInterpolator(new AccelerateDecelerateInterpolator());
+
             mStateAnimation = LauncherAnimUtils.createAnimatorSet();
+
+            mStateAnimation.play(alphaAnimOut);
 
             dispatchOnLauncherTransitionPrepare(fromView, animated, true);
             dispatchOnLauncherTransitionPrepare(toView, animated, true);
@@ -2971,6 +2992,7 @@ public final class Launcher extends Activity
                     if (mWorkspace != null) {
                         mWorkspace.hideScrollingIndicator(false);
                     }
+                    showDockDivider(true);
                     if (onCompleteRunnable != null) {
                         onCompleteRunnable.run();
                     }
@@ -3090,7 +3112,7 @@ public final class Launcher extends Activity
     void enterSpringLoadedDragMode() {
         if (isAllAppsVisible()) {
             hideAppsCustomizeHelper(State.APPS_CUSTOMIZE_SPRING_LOADED, true, null);
-            hideDockDivider();
+            hideDockDivider(true);
             mState = State.APPS_CUSTOMIZE_SPRING_LOADED;
         }
     }
@@ -3127,20 +3149,42 @@ public final class Launcher extends Activity
         // Otherwise, we are not in spring loaded mode, so don't do anything.
     }
 
-    void hideDockDivider() {
-        if (mQsbDivider != null && mDockDivider != null) {
-            if (mShowSearchBar) {
+    void hideDockDivider(boolean animated) {
+        if (mDockDivider != null) {
+            if (mShowSearchBar && mQsbDivider != null) {
                 mQsbDivider.setVisibility(View.INVISIBLE);
             }
             if (mShowDockDivider) {
                 mDockDivider.setVisibility(View.INVISIBLE);
             }
+            if (mDividerAnimator != null) {
+                mDividerAnimator.cancel();
+                if (mQsbDivider != null) mQsbDivider.setAlpha(0f);
+                mDockDivider.setAlpha(0f);
+                mDividerAnimator = null;
+            }
+            if (animated) {
+                mDividerAnimator = LauncherAnimUtils.createAnimatorSet();
+                if (mShowSearchBar && mShowDockDivider && mQsbDivider != null) {
+                    mDividerAnimator.playTogether(LauncherAnimUtils.ofFloat(mQsbDivider, "alpha", 0f),
+                            LauncherAnimUtils.ofFloat(mDockDivider, "alpha", 0f));
+                } else {
+                    mDividerAnimator.play(LauncherAnimUtils.ofFloat(mDockDivider, "alpha", 0f));
+                }
+                int duration = 0;
+                if (mSearchDropTargetBar != null) {
+                    duration = mSearchDropTargetBar.getTransitionInDuration();
+                }
+                mDividerAnimator.setDuration(duration);
+                mDividerAnimator.start();
+            }
         }
+
     }
 
     void showDockDivider(boolean animated) {
-        if (mQsbDivider != null && mDockDivider != null) {
-            if (mShowSearchBar) {
+        if (mDockDivider != null) {
+            if (mShowSearchBar && mQsbDivider != null) {
                 mQsbDivider.setVisibility(View.VISIBLE);
             }
             if (mShowDockDivider) {
@@ -3148,15 +3192,17 @@ public final class Launcher extends Activity
             }
             if (mDividerAnimator != null) {
                 mDividerAnimator.cancel();
-                mQsbDivider.setAlpha(1f);
+                if (mQsbDivider != null) mQsbDivider.setAlpha(1f);
                 mDockDivider.setAlpha(1f);
                 mDividerAnimator = null;
             }
             if (animated) {
                 mDividerAnimator = LauncherAnimUtils.createAnimatorSet();
-                if (mShowSearchBar && mShowDockDivider) {
+                if (mShowSearchBar && mShowDockDivider && mQsbDivider != null) {
                     mDividerAnimator.playTogether(LauncherAnimUtils.ofFloat(mQsbDivider, "alpha", 1f),
                             LauncherAnimUtils.ofFloat(mDockDivider, "alpha", 1f));
+                } else {
+                    mDividerAnimator.play(LauncherAnimUtils.ofFloat(mDockDivider, "alpha", 1f));
                 }
                 int duration = 0;
                 if (mSearchDropTargetBar != null) {
