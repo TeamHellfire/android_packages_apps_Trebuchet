@@ -413,16 +413,12 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         mWidgetCountX = a.getInt(R.styleable.AppsCustomizePagedView_widgetCountX, 2);
         mWidgetCountY = a.getInt(R.styleable.AppsCustomizePagedView_widgetCountY, 2);
 
-        int widgetCountX = PreferencesProvider.Interface.Drawer.getWidgetCountX(mWidgetCountX);
-        int widgetCountY = PreferencesProvider.Interface.Drawer.getWidgetCountY(mWidgetCountY);
         if (LauncherApplication.isScreenLandscape(context)) {
-            widgetCountX = PreferencesProvider.Interface.Drawer.getWidgetCountXLand(mWidgetCountX);
-            widgetCountY = PreferencesProvider.Interface.Drawer.getWidgetCountYLand(mWidgetCountY);
-        }
-
-        if (widgetCountX > 0 && widgetCountY > 0) {
-            mWidgetCountX = widgetCountX;
-            mWidgetCountY = widgetCountY;
+            mWidgetCountX = PreferencesProvider.Interface.Drawer.getWidgetCountXLand(mWidgetCountX);
+            mWidgetCountY = PreferencesProvider.Interface.Drawer.getWidgetCountYLand(mWidgetCountY);
+        } else {
+            mWidgetCountX = PreferencesProvider.Interface.Drawer.getWidgetCountX(mWidgetCountX);
+            mWidgetCountY = PreferencesProvider.Interface.Drawer.getWidgetCountY(mWidgetCountY);
         }
 
         mClingFocusedX = a.getInt(R.styleable.AppsCustomizePagedView_clingFocusedX, 0);
@@ -573,22 +569,25 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
             maxWidgetCellCountY = Math.min(maxWidgetCellCountY, mMaxAppCellCountY);
         }
 
-        int cellCountX = PreferencesProvider.Interface.Drawer.getCellCountX(maxCellCountX);
-        int cellCountY = PreferencesProvider.Interface.Drawer.getCellCountY(maxCellCountY);
+        int cellCountX = 0;
+        int cellCountY = 0;
 
         if (isLandscape) {
-            cellCountX = PreferencesProvider.Interface.Drawer.getCellCountXLand(maxCellCountX);
-            cellCountY = PreferencesProvider.Interface.Drawer.getCellCountYLand(maxCellCountY);
+            cellCountX = PreferencesProvider.Interface.Drawer.getCellCountXLand(cellCountX);
+            cellCountY = PreferencesProvider.Interface.Drawer.getCellCountYLand(cellCountY);
+        } else {
+            cellCountX = PreferencesProvider.Interface.Drawer.getCellCountX(cellCountX);
+            cellCountY = PreferencesProvider.Interface.Drawer.getCellCountY(cellCountY);
         }
 
         if (cellCountX > 0) {
-			maxCellCountX = cellCountX;
-			mPageLayoutWidthGap = -1;
-		}
+            maxCellCountX = cellCountX;
+            mPageLayoutWidthGap = -1;
+        }
         if (cellCountY > 0) {
-			maxCellCountY = cellCountY;
-			mPageLayoutHeightGap = -1;
-		}
+            maxCellCountY = cellCountY;
+            mPageLayoutHeightGap = -1;
+        }
 
         // Now that the data is ready, we can calculate the content width, the number of cells to
         // use for each page
