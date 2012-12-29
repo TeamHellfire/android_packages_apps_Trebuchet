@@ -19,22 +19,30 @@ package com.cyanogenmod.trebuchet.preference;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Display;
+import android.view.IWindowManager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.cyanogenmod.trebuchet.LauncherApplication;
+import com.cyanogenmod.trebuchet.preference.DoubleNumberPickerPreference;
 import com.cyanogenmod.trebuchet.R;
 
 import java.util.List;
@@ -119,11 +127,65 @@ public class Preferences extends PreferenceActivity
     }
 
     public static class DrawerFragment extends PreferenceFragment {
+        private static DoubleNumberPickerPreference mPortraitAppGrid;
+        private static DoubleNumberPickerPreference mLandscapeAppGrid;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
             addPreferencesFromResource(R.xml.preferences_drawer);
+            mPortraitAppGrid = (DoubleNumberPickerPreference)
+                    findPreference("ui_drawer_grid");
+            mLandscapeAppGrid = (DoubleNumberPickerPreference)
+                    findPreference("ui_drawer_grid_land");
+        }
+
+        public void onResume() {
+            super.onResume();
+
+            boolean landscape = LauncherApplication.isScreenLandscape(getActivity());
+
+            Resources r = getActivity().getResources();
+
+            WindowManager wm = (WindowManager) getActivity().getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            Point size = new Point();
+            display.getRealSize(size);
+
+            boolean hasNavBar = false;
+            boolean hasSysNavBar = false;
+            IWindowManager windowManager = IWindowManager.Stub.asInterface(
+                    ServiceManager.getService(Context.WINDOW_SERVICE));
+            try {
+                hasNavBar = windowManager.hasNavigationBar();
+                hasSysNavBar = windowManager.hasSystemNavBar();
+            } catch (RemoteException e) {
+            }
+
+            final float cellWidth = r.getDimension(R.dimen.apps_customize_cell_width);
+            final float cellHeight = r.getDimension(R.dimen.apps_customize_cell_height);
+            DisplayMetrics displayMetrics = r.getDisplayMetrics();
+            final float screenWidth = r.getConfiguration().screenWidthDp * displayMetrics.density;
+            final float screenHeight = r.getConfiguration().screenHeightDp * displayMetrics.density;
+            final float systemBarHeight = r.getDimension(hasSysNavBar ?
+                    com.android.internal.R.dimen.navigation_bar_height :
+                    com.android.internal.R.dimen.status_bar_height);
+            final float navigationBarHeight = hasNavBar ?
+                    r.getDimension(com.android.internal.R.dimen.navigation_bar_height) : 0;
+            final float tabBarHeight = r.getDimension(R.dimen.apps_customize_tab_bar_height)
+                    + r.getDimension(R.dimen.apps_customize_tab_bar_margin_top);
+
+            int cellCountXPort = (int) ((landscape ? size.y : screenWidth) / cellWidth);
+            int cellCountYPort = (int) (((landscape ? (screenWidth - systemBarHeight - navigationBarHeight) : screenHeight) - tabBarHeight) / cellHeight);
+
+            int cellCountXLand = (int) ((landscape ? screenWidth : size.y) / cellWidth);
+            int cellCountYLand = (int) (((landscape ? screenHeight : (screenWidth - systemBarHeight - navigationBarHeight)) - tabBarHeight) / cellHeight);
+
+            mPortraitAppGrid.setMax1(cellCountYPort);
+            mPortraitAppGrid.setMax2(cellCountXPort);
+
+            mLandscapeAppGrid.setMax1(cellCountYLand);
+            mLandscapeAppGrid.setMax2(cellCountXLand);
         }
     }
 

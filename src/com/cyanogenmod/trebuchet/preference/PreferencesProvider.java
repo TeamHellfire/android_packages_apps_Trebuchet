@@ -153,6 +153,73 @@ public final class PreferencesProvider {
             public static boolean getDrawerShowWallpaper() {
                 return getBoolean("ui_drawer_background_show_wallpaper", false);
             }
+            public static int getCellCountX(int def) {
+                String[] values = getString("ui_drawer_grid", "0|" + def).split("\\|");
+                try {
+                    return Integer.parseInt(values[1]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getCellCountY(int def) {
+                String[] values = getString("ui_drawer_grid", def + "|0").split("\\|");
+                try {
+                    return Integer.parseInt(values[0]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getCellCountXLand(int def) {
+                String[] values = getString("ui_drawer_grid_land", "0|" + def).split("\\|");
+                try {
+                    return Integer.parseInt(values[1]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getCellCountYLand(int def) {
+                String[] values = getString("ui_drawer_grid_land", def + "|0").split("\\|");
+                try {
+                    return Integer.parseInt(values[0]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getWidgetCountX(int def) {
+                String[] values = getString("ui_app_widget_grid", "0|" + def).split("\\|");
+                try {
+                    return Integer.parseInt(values[1]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getWidgetCountY(int def) {
+                String[] values = getString("ui_app_widget_grid", def + "|0").split("\\|");
+                try {
+                    return Integer.parseInt(values[0]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getWidgetCountXLand(int def) {
+                String[] values = getString("ui_app_widget_grid_land", "0|" + def).split("\\|");
+                try {
+                    return Integer.parseInt(values[1]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getWidgetCountYLand(int def) {
+                String[] values = getString("ui_app_widget_grid_land", def + "|0").split("\\|");
+                try {
+                    return Integer.parseInt(values[0]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static boolean getDismissDrawerOnTap() {
+                return getBoolean("ui_drawer_dismiss_on_tap", false);
+            }
             public static class Scrolling {
                 public static AppsCustomizePagedView.TransitionEffect getTransitionEffect(String def) {
                     try {
@@ -223,3 +290,4 @@ public final class PreferencesProvider {
 
     }
 }
+

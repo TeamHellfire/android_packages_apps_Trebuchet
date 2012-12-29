@@ -51,6 +51,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -411,6 +412,19 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
             a.getDimensionPixelSize(R.styleable.AppsCustomizePagedView_widgetCellHeightGap, 0);
         mWidgetCountX = a.getInt(R.styleable.AppsCustomizePagedView_widgetCountX, 2);
         mWidgetCountY = a.getInt(R.styleable.AppsCustomizePagedView_widgetCountY, 2);
+
+        int widgetCountX = PreferencesProvider.Interface.Drawer.getWidgetCountX(mWidgetCountX);
+        int widgetCountY = PreferencesProvider.Interface.Drawer.getWidgetCountY(mWidgetCountY);
+        if (LauncherApplication.isScreenLandscape(context)) {
+            widgetCountX = PreferencesProvider.Interface.Drawer.getWidgetCountXLand(mWidgetCountX);
+            widgetCountY = PreferencesProvider.Interface.Drawer.getWidgetCountYLand(mWidgetCountY);
+        }
+
+        if (widgetCountX > 0 && widgetCountY > 0) {
+            mWidgetCountX = widgetCountX;
+            mWidgetCountY = widgetCountY;
+        }
+
         mClingFocusedX = a.getInt(R.styleable.AppsCustomizePagedView_clingFocusedX, 0);
         mClingFocusedY = a.getInt(R.styleable.AppsCustomizePagedView_clingFocusedY, 0);
         a.recycle();
@@ -430,6 +444,14 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         Context context = getContext();
         Resources r = context.getResources();
         setDragSlopeThreshold(r.getInteger(R.integer.config_appsCustomizeDragSlopeThreshold)/100f);
+    }
+
+    @Override
+    protected void onUnhandledTap(MotionEvent ev) {
+        if (PreferencesProvider.Interface.Drawer.getDismissDrawerOnTap()) {
+            // Dismiss AppsCustomize if we tap
+            mLauncher.showWorkspace(true);
+        }
     }
 
     /** Returns the item index of the center item on this page so that we can restore to this
@@ -532,9 +554,8 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     }
 
     protected void onDataReady(int width, int height) {
-        // Note that we transpose the counts in portrait so that we get a similar layout
         boolean isLandscape = getResources().getConfiguration().orientation ==
-            Configuration.ORIENTATION_LANDSCAPE;
+                Configuration.ORIENTATION_LANDSCAPE;
         int maxCellCountX = Integer.MAX_VALUE;
         int maxCellCountY = Integer.MAX_VALUE;
         if (LauncherApplication.isScreenLarge()) {
@@ -551,6 +572,23 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         if (mMaxAppCellCountY > -1) {
             maxWidgetCellCountY = Math.min(maxWidgetCellCountY, mMaxAppCellCountY);
         }
+
+        int cellCountX = PreferencesProvider.Interface.Drawer.getCellCountX(maxCellCountX);
+        int cellCountY = PreferencesProvider.Interface.Drawer.getCellCountY(maxCellCountY);
+
+        if (isLandscape) {
+            cellCountX = PreferencesProvider.Interface.Drawer.getCellCountXLand(maxCellCountX);
+            cellCountY = PreferencesProvider.Interface.Drawer.getCellCountYLand(maxCellCountY);
+        }
+
+        if (cellCountX > 0) {
+			maxCellCountX = cellCountX;
+			mPageLayoutWidthGap = -1;
+		}
+        if (cellCountY > 0) {
+			maxCellCountY = cellCountY;
+			mPageLayoutHeightGap = -1;
+		}
 
         // Now that the data is ready, we can calculate the content width, the number of cells to
         // use for each page
@@ -2546,3 +2584,4 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         }
     }
 }
+
