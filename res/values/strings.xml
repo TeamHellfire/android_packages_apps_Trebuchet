@@ -405,6 +405,8 @@ s -->
     <string name="preferences_interface_dock_icon_scale_summary">Scale of icons in the dock</string>
     <string name="preferences_interface_dock_divider_title">Show dock divider</string>
     <string name="preferences_interface_dock_divider_summary">Show divider between homescreen and dock</string>
+    <string name="preferences_interface_dock_bottom_title">Dock on bottom</string>
+    <string name="preferences_interface_dock_bottom_summary">Always show dock on the bottom of the screen</string>
 
     <!-- Icons -->
     <string name="preferences_interface_icons_title">Icons</string>

@@ -47,4 +47,8 @@
         android:title="@string/preferences_interface_dock_divider_title"
         android:summary="@string/preferences_interface_dock_divider_summary"
         android:defaultValue="true" />
+    <CheckBoxPreference android:key="ui_land_dock_bottom"
+        android:title="@string/preferences_interface_dock_bottom_title"
+        android:summary="@string/preferences_interface_dock_bottom_summary"
+        android:defaultValue="false" />
 </PreferenceScreen>

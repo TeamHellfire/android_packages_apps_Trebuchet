@@ -34,6 +34,7 @@ public class Hotseat extends PagedView {
 
     private boolean mTransposeLayoutWithOrientation;
     private boolean mIsLandscape;
+    private boolean mLandscapeDockOnBottom;
 
     private float[] mTempCellLayoutCenterCoordinates = new float[2];
     private Matrix mTempInverseMatrix = new Matrix();
@@ -66,6 +67,7 @@ public class Hotseat extends PagedView {
                 context.getResources().getBoolean(R.bool.hotseat_transpose_layout_with_orientation);
         mIsLandscape = context.getResources().getConfiguration().orientation ==
             Configuration.ORIENTATION_LANDSCAPE;
+        mLandscapeDockOnBottom = mIsLandscape && PreferencesProvider.Interface.Dock.getLandscapeDockOnBottom();
         mCellCount = a.getInt(R.styleable.Hotseat_cellCount, DEFAULT_CELL_COUNT);
         int cellCount = PreferencesProvider.Interface.Dock.getNumberIcons(0);
         if (cellCount > 0) {
@@ -103,7 +105,7 @@ public class Hotseat extends PagedView {
     }
 
     private boolean hasVerticalHotseat() {
-        return (mIsLandscape && mTransposeLayoutWithOrientation);
+        return (mIsLandscape && !mLandscapeDockOnBottom && mTransposeLayoutWithOrientation);
     }
 
     /* Get the orientation invariant order of the item in the hotseat for persistence. */

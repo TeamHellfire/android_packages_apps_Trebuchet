@@ -19,7 +19,6 @@
     xmlns:launcher="http://schemas.android.com/apk/res/com.cyanogenmod.trebuchet"
 
     android:id="@+id/drag_layer"
-    android:background="@drawable/workspace_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -28,30 +27,31 @@
         android:id="@+id/workspace"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/workspace_left_padding"
-        android:paddingRight="@dimen/workspace_right_padding"
-        android:paddingTop="@dimen/workspace_top_padding"
-        android:paddingBottom="@dimen/workspace_bottom_padding"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:paddingTop="@dimen/qsb_bar_height_top"
+        android:paddingBottom="@dimen/button_bar_height"
         launcher:cellCountX="@integer/cell_count_x"
         launcher:cellCountY="@integer/cell_count_y"
         launcher:pageSpacing="@dimen/workspace_page_spacing"
-        launcher:scrollIndicatorPaddingLeft="@dimen/workspace_divider_padding_left"
-        launcher:scrollIndicatorPaddingRight="@dimen/workspace_divider_padding_right" />
+        launcher:scrollIndicatorPaddingLeft="0dp"
+        launcher:scrollIndicatorPaddingRight="0dp" />
 
     <include
         android:id="@+id/dock_divider"
-        layout="@layout/workspace_divider"
-        android:layout_width="match_parent"
+        layout="@layout/workspace_divider_top"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/button_bar_height_plus_padding"
-        android:layout_gravity="bottom|center_horizontal" />
+        android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/button_bar_height"
+        android:layout_gravity="bottom" />
+
     <include
         android:id="@+id/paged_view_indicator_dock"
         layout="@layout/scroll_indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/button_bar_height_plus_padding" />
+        android:layout_marginBottom="@dimen/button_bar_height" />
 
     <include
         android:id="@+id/paged_view_indicator_top"
@@ -69,20 +69,19 @@
 
     <include layout="@layout/hotseat"
         android:id="@+id/hotseat"
+        android:layout_height="@dimen/button_bar_height"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/button_bar_height_plus_padding"
         android:layout_gravity="bottom" />
-
     <include
         android:id="@+id/qsb_bar"
-        layout="@layout/qsb_bar" />
+        layout="@layout/qsb_bar_top" />
 
     <com.cyanogenmod.trebuchet.DrawableStateProxyView
         android:id="@+id/voice_button_proxy"
-        android:layout_width="80dp"
-        android:layout_height="@dimen/qsb_bar_height"
-        android:layout_marginRight="@dimen/qsb_voice_proxy_padding_right"
-        android:layout_gravity="top|right"
+        android:layout_width="@dimen/qsb_bar_height_top"
+        android:layout_height="@dimen/app_icon_size"
+        android:layout_gravity="top|left"
+        android:layout_marginTop="64dp"
         android:clickable="true"
         android:onClick="onClickVoiceButton"
         android:importantForAccessibility="no"

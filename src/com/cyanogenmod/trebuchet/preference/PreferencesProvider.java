@@ -77,7 +77,7 @@ public final class PreferencesProvider {
                 }
             }
             public static boolean getStretchScreens() {
-                return getBoolean("ui_homescreen_stretch_screens", false);
+                return getBoolean("ui_homescreen_stretch_screens", true);
             }
             public static int getIconScale(int def) {
                 return getInt("ui_icon_scale", def);
@@ -238,7 +238,7 @@ public final class PreferencesProvider {
                     return AppsCustomizePagedView.TransitionEffect.Standard;
                 }
                 public static boolean getFadeInAdjacentScreens() {
-                    return getBoolean("ui_drawer_scrolling_fade_adjacent_screens", false);
+                    return getBoolean("ui_drawer_scrolling_fade_adjacent_screens", true);
                 }
             }
             public static class Indicator {
@@ -269,6 +269,9 @@ public final class PreferencesProvider {
             }
             public static boolean getShowDivider() {
                 return getBoolean("ui_dock_divider", true);
+            }
+            public static boolean getLandscapeDockOnBottom() {
+                return getBoolean("ui_land_dock_bottom", false);
             }
         }
 

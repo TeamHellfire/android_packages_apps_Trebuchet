@@ -103,6 +103,7 @@
             android:entryValues="@array/preferences_interface_drawer_scrolling_transition_effect_values"
             android:defaultValue="@string/config_drawerDefaultTransitionEffect" />
         <CheckBoxPreference android:key="ui_drawer_scrolling_fade_adjacent_screens"
+            android:defaultValue="true"
             android:title="@string/preferences_interface_drawer_scrolling_fade_adjacent_screens_title"
             android:summary="@string/preferences_interface_drawer_scrolling_fade_adjacent_screens_summary" />
     </PreferenceCategory>

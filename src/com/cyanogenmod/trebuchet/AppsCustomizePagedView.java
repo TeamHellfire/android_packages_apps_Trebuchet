@@ -2005,7 +2005,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
                         (!mVertical ? v.getMeasuredWidth() : v.getMeasuredHeight());
                 float alpha;
 
-                if (!LauncherApplication.isScreenLarge() || scrollProgress < 0) {
+                if ((!LauncherApplication.isScreenLarge() && !mFadeInAdjacentScreens) || scrollProgress < 0) {
                     alpha = scrollProgress < 0 ? mAlphaInterpolator.getInterpolation(
                         1 - Math.abs(scrollProgress)) : 1.0f;
                 } else {

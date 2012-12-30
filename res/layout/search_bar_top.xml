@@ -16,14 +16,14 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:launcher="http://schemas.android.com/apk/res/com.cyanogenmod.trebuchet"
-    style="@style/SearchDropTargetBar"
+    style="@style/SearchDropTargetBarTop"
     android:layout_width="match_parent"
     android:layout_height="@dimen/search_bar_height"
     android:layout_gravity="bottom|center_horizontal"
     android:background="@drawable/search_frame">
    <!-- Global search icon -->
    <com.cyanogenmod.trebuchet.HolographicLinearLayout
-        style="@style/SearchButton"
+        style="@style/SearchButtonTop"
         launcher:sourceImageViewId="@+id/search_button"
         android:id="@+id/search_button_container"
         android:layout_width="match_parent"
@@ -47,7 +47,7 @@
 
     <!-- Voice search icon -->
     <com.cyanogenmod.trebuchet.HolographicLinearLayout
-        style="@style/SearchButton"
+        style="@style/SearchButtonTop"
         launcher:sourceImageViewId="@+id/voice_button"
         android:id="@+id/voice_button_container"
         android:layout_width="@dimen/search_bar_height"

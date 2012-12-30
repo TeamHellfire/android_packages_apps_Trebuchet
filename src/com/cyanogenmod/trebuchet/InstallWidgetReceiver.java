@@ -133,8 +133,8 @@ public class InstallWidgetReceiver {
 
             // Use the convert-view where possible
             if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.external_widget_drop_list_item, parent,
-                        false);
+            //    convertView = mInflater.inflate(R.layout.external_widget_drop_list_item, parent,
+            //            false);
             }
 
             final WidgetMimeTypeHandlerData data = mActivities.get(position);
@@ -143,16 +143,16 @@ public class InstallWidgetReceiver {
 
             // Set the icon
             Drawable d = resolveInfo.loadIcon(packageManager);
-            ImageView i = (ImageView) convertView.findViewById(R.id.provider_icon);
-            i.setImageDrawable(d);
+            //ImageView i = (ImageView) convertView.findViewById(R.id.provider_icon);
+            //i.setImageDrawable(d);
 
             // Set the text
             final CharSequence component = resolveInfo.loadLabel(packageManager);
             final int[] widgetSpan = new int[2];
             mTargetLayout.rectToCell(widgetInfo.minWidth, widgetInfo.minHeight, widgetSpan);
-            TextView t = (TextView) convertView.findViewById(R.id.provider);
-            t.setText(context.getString(R.string.external_drop_widget_pick_format,
-                    component, widgetSpan[0], widgetSpan[1]));
+            //TextView t = (TextView) convertView.findViewById(R.id.provider);
+            //t.setText(context.getString(R.string.external_drop_widget_pick_format,
+            //        component, widgetSpan[0], widgetSpan[1]));
 
             return convertView;
         }

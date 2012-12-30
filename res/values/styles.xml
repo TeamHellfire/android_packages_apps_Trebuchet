@@ -120,7 +120,21 @@
         <item name="android:paddingLeft">@dimen/qsb_padding_left</item>
         <item name="android:paddingRight">@dimen/qsb_padding_right</item>
     </style>
+    <style name="QSBBarTop">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/qsb_bar_height_top</item>
+        <item name="android:layout_gravity">top|center_horizontal</item>
+        <item name="android:paddingLeft">@dimen/qsb_padding_left</item>
+        <item name="android:paddingRight">@dimen/qsb_padding_right</item>
+    </style>
     <style name="SearchDropTargetBar">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">bottom|center_horizontal</item>
+    </style>
+    <style name="SearchDropTargetBarTop">
         <item name="android:orientation">horizontal</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -131,11 +145,37 @@
         <item name="android:paddingTop">@dimen/toolbar_button_vertical_padding</item>
         <item name="android:paddingBottom">@dimen/toolbar_button_vertical_padding</item>
     </style>
+    <style name="SearchButtonTop">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+    </style>
     <style name="DropTargetButtonContainer">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
     </style>
+    <style name="DropTargetButtonContainerTop">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
     <style name="DropTargetButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawablePadding">7.5dp</item>
+        <item name="android:paddingLeft">25dp</item>
+        <item name="android:paddingRight">25dp</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:shadowColor">#FF000000</item>
+        <item name="android:shadowDx">0.0</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">4.0</item>
+    </style>
+    <style name="DropTargetButtonTop">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_gravity">center</item>

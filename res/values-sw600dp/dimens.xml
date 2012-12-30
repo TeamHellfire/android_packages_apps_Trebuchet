@@ -24,6 +24,7 @@
          that we put on each page for allowing folders to draw out of bounds -->
     <dimen name="qsb_bar_height_inset">34dp</dimen>
     <dimen name="qsb_bar_height">48dp</dimen>
+    <dimen name="qsb_bar_height_top">48dp</dimen>
     <dimen name="qsb_padding_left">16dp</dimen>
     <dimen name="qsb_padding_right">16dp</dimen>
 

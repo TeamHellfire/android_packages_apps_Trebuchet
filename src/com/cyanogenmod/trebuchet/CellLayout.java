@@ -979,11 +979,13 @@ public class CellLayout extends ViewGroup {
 
     private int getMaxCellWidth() {
         boolean landscape = LauncherApplication.isScreenLandscape(getContext());
-        int searchBarWidth = landscape ? (PreferencesProvider.Interface.Homescreen.getShowSearchBar()
+        boolean landscapeDockOnBottom = landscape && PreferencesProvider.Interface.Dock.getLandscapeDockOnBottom();
+        boolean showSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar();
+        int searchBarWidth = (landscape && !landscapeDockOnBottom) ? (showSearchBar
                 ? getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0) : 0;
-        int dockWidth = landscape ?
+        int dockWidth = (landscape && !landscapeDockOnBottom) ?
                 getResources().getDimensionPixelSize(
-                R.dimen.button_bar_height_plus_padding) : 0;
+                R.dimen.button_bar_height) : 0;
         int width = (int) (getResources().getConfiguration().screenWidthDp *
                 LauncherApplication.getScreenDensity()) - searchBarWidth - dockWidth;
         return width / mCountX;
@@ -991,12 +993,13 @@ public class CellLayout extends ViewGroup {
 
     private int getMaxCellHeight() {
         boolean landscape = LauncherApplication.isScreenLandscape(getContext());
-        int searchBarHeight = landscape ? 0 :
-                (PreferencesProvider.Interface.Homescreen.getShowSearchBar()
+        boolean landscapeDockOnBottom = landscape && PreferencesProvider.Interface.Dock.getLandscapeDockOnBottom();
+        boolean showSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar();
+        int searchBarHeight = (landscape && !landscapeDockOnBottom) ? 0 : (showSearchBar
                 ? getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0);
-        int dockHeight = landscape ? 0 :
+        int dockHeight = (landscape && !landscapeDockOnBottom) ? 0 :
                 getResources().getDimensionPixelSize(
-                R.dimen.button_bar_height_plus_padding);
+                R.dimen.button_bar_height);
         int height = (int) (getResources().getConfiguration().screenHeightDp *
                 LauncherApplication.getScreenDensity()) - searchBarHeight - dockHeight;
         return height / mCountY;

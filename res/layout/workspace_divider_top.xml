@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 The Android Open Source Project
+<!-- Copyright (C) 2011 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,14 +13,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@drawable/wallpaper_gallery_item">
-    <ImageView
-        android:id="@+id/wallpaper_image"
-        android:layout_width="@dimen/wallpaper_chooser_grid_width"
-        android:layout_height="@dimen/wallpaper_chooser_grid_height"
-        android:scaleType="centerCrop"
-        android:focusable="true" />
-</FrameLayout>
+<ImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingTop="@dimen/workspace_divider_padding_left"
+    android:paddingBottom="@dimen/workspace_divider_padding_right"
+    android:paddingRight="@dimen/workspace_divider_padding_top"
+    android:paddingLeft="@dimen/workspace_divider_padding_bottom"
+    android:scaleType="fitXY"
+    android:src="@drawable/hotseat_track_holo" />

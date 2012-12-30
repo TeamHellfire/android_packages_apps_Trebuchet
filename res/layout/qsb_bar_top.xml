@@ -13,8 +13,21 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<com.cyanogenmod.trebuchet.Hotseat
+<com.cyanogenmod.trebuchet.SearchDropTargetBar
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:launcher="http://schemas.android.com/apk/res/com.cyanogenmod.trebuchet"
-    launcher:cellCountX="@integer/hotseat_cell_count"
-    launcher:cellCountY="1" />
+    style="@style/QSBBarTop"
+    android:focusable="false">
+
+    <!-- Search buttons container -->
+    <include android:id="@+id/qsb_search_bar"
+        layout="@layout/search_bar_top" />
+
+    <!-- Drag specific targets container -->
+    <LinearLayout
+        style="@style/SearchDropTargetBarTop"
+        android:id="@+id/drag_target_bar">
+
+        <include
+            layout="@layout/drop_target_bar_top" />
+    </LinearLayout>
+</com.cyanogenmod.trebuchet.SearchDropTargetBar>

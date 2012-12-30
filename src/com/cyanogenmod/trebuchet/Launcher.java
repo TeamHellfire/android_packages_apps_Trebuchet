@@ -316,6 +316,7 @@ public final class Launcher extends Activity
     private boolean mAutoRotate;
     private boolean mFullscreenMode;
     private boolean mDrawerShowWallpaper;
+    private boolean mLandscapeDockOnBottom;
 
     private boolean mWallpaperVisible;
 
@@ -397,6 +398,8 @@ public final class Launcher extends Activity
         mAutoRotate = PreferencesProvider.Interface.General.getAutoRotate(getResources().getBoolean(R.bool.allow_rotation));
         mFullscreenMode = PreferencesProvider.Interface.General.getFullscreenMode();
         mDrawerShowWallpaper = PreferencesProvider.Interface.Drawer.getDrawerShowWallpaper();
+        mLandscapeDockOnBottom = PreferencesProvider.Interface.Dock.getLandscapeDockOnBottom() &&
+                LauncherApplication.isScreenLandscape(app);
 
         if (PROFILE_STARTUP) {
             android.os.Debug.startMethodTracing(
@@ -404,7 +407,7 @@ public final class Launcher extends Activity
         }
 
         checkForLocaleChange();
-        setContentView(R.layout.launcher);
+        setContentView(mLandscapeDockOnBottom? R.layout.launcher_land : R.layout.launcher);
         setupViews();
         showFirstRunWorkspaceCling();
 

@@ -10,7 +10,7 @@
 
 <!-- Workspace -->
     <!-- Whether to show outlines on the screens when scrolling -->
-    <bool name="config_workspaceDefaultShowOutlines">true</bool>
+    <bool name="config_workspaceDefaultShowOutlines">false</bool>
 
 <!-- DragController -->
     <integer name="config_flingToDeleteMinVelocity">-1000</integer>
