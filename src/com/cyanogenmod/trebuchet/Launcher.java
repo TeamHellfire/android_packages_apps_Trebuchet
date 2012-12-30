@@ -2979,7 +2979,9 @@ public final class Launcher extends Activity
 
             mStateAnimation = LauncherAnimUtils.createAnimatorSet();
 
-            mStateAnimation.play(alphaAnimOut);
+            if (!(toState == State.WORKSPACE && mState == State.APPS_CUSTOMIZE_SPRING_LOADED)) {
+                mStateAnimation.play(alphaAnimOut);
+            }
 
             dispatchOnLauncherTransitionPrepare(fromView, animated, true);
             dispatchOnLauncherTransitionPrepare(toView, animated, true);
