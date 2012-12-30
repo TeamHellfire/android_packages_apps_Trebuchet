@@ -51,6 +51,7 @@
                 layout="@layout/market_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginRight="60dp"
                 android:layout_gravity="right" />
         </FrameLayout>
         <FrameLayout

@@ -1763,15 +1763,15 @@ public final class Launcher extends Activity
         boolean allAppsVisible = (mAppsCustomizeTabHost.getVisibility() == View.VISIBLE);
         menu.setGroupVisible(MENU_GROUP_WALLPAPER, !allAppsVisible);
 
-        Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
-        launcherIntent.addCategory(Intent.CATEGORY_HOME);
-        launcherIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        ActivityInfo defaultLauncher = getPackageManager().resolveActivity(launcherIntent, PackageManager.MATCH_DEFAULT_ONLY).activityInfo;
+        //Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
+        //launcherIntent.addCategory(Intent.CATEGORY_HOME);
+        //launcherIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        //ActivityInfo defaultLauncher = getPackageManager().resolveActivity(launcherIntent, PackageManager.MATCH_DEFAULT_ONLY).activityInfo;
         // Hide preferences if not on CyanogenMod or not default launcher
         // (in which case preferences don't get shown in system settings)
-        boolean preferencesVisible = !getPackageManager().hasSystemFeature("com.cyanogenmod.android") ||
-                !defaultLauncher.packageName.equals(getClass().getPackage().getName());
-        menu.findItem(MENU_PREFERENCES).setVisible(preferencesVisible);
+        //boolean preferencesVisible = !getPackageManager().hasSystemFeature("com.cyanogenmod.android") ||
+        //        !defaultLauncher.packageName.equals(getClass().getPackage().getName());
+        //menu.findItem(MENU_PREFERENCES).setVisible(preferencesVisible);
         return true;
     }
 
@@ -4025,7 +4025,7 @@ public final class Launcher extends Activity
         }.start();
 
         // Hide overflow menu on devices with a hardkey
-        updateOverflowMenuButton();
+        //updateOverflowMenuButton();
     }
 
     @Override
