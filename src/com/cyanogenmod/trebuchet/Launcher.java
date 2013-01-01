@@ -133,11 +133,13 @@ public final class Launcher extends Activity
     static final boolean DEBUG_STRICT_MODE = false;
 
     private static final int MENU_GROUP_WALLPAPER = 1;
-    private static final int MENU_WALLPAPER_SETTINGS = Menu.FIRST + 1;
-    private static final int MENU_MANAGE_APPS = MENU_WALLPAPER_SETTINGS + 1;
-    private static final int MENU_PREFERENCES = MENU_MANAGE_APPS + 1;
-    private static final int MENU_SYSTEM_SETTINGS = MENU_PREFERENCES + 1;
-    private static final int MENU_HELP = MENU_SYSTEM_SETTINGS + 1;
+    private static final int MENU_GROUP_DRAWER = MENU_GROUP_WALLPAPER + 1;
+    private static final int MENU_DRAWER = Menu.FIRST + 1;
+    private static final int MENU_MANAGE_APPS = MENU_DRAWER + 1;
+    private static final int MENU_SYSTEM_SETTINGS = MENU_MANAGE_APPS + 1;
+    private static final int MENU_PREFERENCES = MENU_SYSTEM_SETTINGS + 1;
+    private static final int MENU_WALLPAPER_SETTINGS = MENU_PREFERENCES + 1;
+    private static final int MENU_HELP = MENU_WALLPAPER_SETTINGS + 1;
 
     private static final int REQUEST_CREATE_SHORTCUT = 1;
     private static final int REQUEST_CREATE_APPWIDGET = 5;
@@ -1727,23 +1729,35 @@ public final class Launcher extends Activity
         help.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 
-        menu.add(MENU_GROUP_WALLPAPER, MENU_WALLPAPER_SETTINGS, 0, R.string.menu_wallpaper)
-            .setIcon(android.R.drawable.ic_menu_gallery)
-            .setAlphabeticShortcut('W');
+        menu.add(MENU_GROUP_DRAWER, MENU_DRAWER, 0, R.string.menu_app_drawer)
+            .setIcon(android.R.drawable.ic_menu_preferences)
+            .setAlphabeticShortcut('D')
+            .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        showAllApps(true);
+                        return true;
+                    }
+            });
+
         menu.add(0, MENU_MANAGE_APPS, 0, R.string.menu_manage_apps)
             .setIcon(android.R.drawable.ic_menu_manage)
             .setIntent(manageApps)
             .setAlphabeticShortcut('A');
+
+        menu.add(0, MENU_SYSTEM_SETTINGS, 0, R.string.menu_settings)
+            .setIcon(android.R.drawable.ic_menu_preferences)
+            .setIntent(settings)
+            .setAlphabeticShortcut('S');
 
         menu.add(0, MENU_PREFERENCES, 0, R.string.menu_preferences)
             .setIcon(android.R.drawable.ic_menu_preferences)
             .setIntent(preferences)
             .setAlphabeticShortcut('P');
 
-        menu.add(0, MENU_SYSTEM_SETTINGS, 0, R.string.menu_settings)
-            .setIcon(android.R.drawable.ic_menu_preferences)
-            .setIntent(settings)
-            .setAlphabeticShortcut('S');
+        menu.add(MENU_GROUP_WALLPAPER, MENU_WALLPAPER_SETTINGS, 0, R.string.menu_wallpaper)
+            .setIcon(android.R.drawable.ic_menu_gallery)
+            .setAlphabeticShortcut('W');
+
         if (!helpUrl.isEmpty()) {
             menu.add(0, MENU_HELP, 0, R.string.menu_help)
                 .setIcon(android.R.drawable.ic_menu_help)
@@ -1762,6 +1776,7 @@ public final class Launcher extends Activity
         }
         boolean allAppsVisible = (mAppsCustomizeTabHost.getVisibility() == View.VISIBLE);
         menu.setGroupVisible(MENU_GROUP_WALLPAPER, !allAppsVisible);
+        menu.setGroupVisible(MENU_GROUP_DRAWER, !allAppsVisible);
 
         //Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
         //launcherIntent.addCategory(Intent.CATEGORY_HOME);

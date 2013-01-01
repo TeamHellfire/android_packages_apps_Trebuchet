@@ -165,6 +165,8 @@ s -->
     <string name="menu_preferences">Trebuchet settings</string>
     <!-- Noun, menu item used to show help. [CHAR_LIMIT=none] -->
     <string name="menu_help">Help</string>
+    <!-- Noun, menu item used to show the app drawer -->
+    <string name="menu_app_drawer">App drawer</string>
 
     <!-- Noun, menu item used to sort apps by name -->
     <string name="menu_apps_sort_title">Name</string>
