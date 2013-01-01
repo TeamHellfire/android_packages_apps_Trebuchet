@@ -101,4 +101,13 @@ public class NumberPickerPreference extends DialogPreference {
         }
     }
 
+    public void setMin(int min) {
+        mMin = min;
+    }
+    public void setMax(int max) {
+        mMax = max;
+    }
+    public void setDefault(int def) {
+        mDefault = def;
+    }
 }

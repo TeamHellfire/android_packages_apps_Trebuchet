@@ -345,6 +345,7 @@ public class Workspace extends PagedView
         final Resources res = getResources();
         mHandleFadeInAdjacentScreens = true;
         mWallpaperManager = WallpaperManager.getInstance(context);
+        mStretchScreens = PreferencesProvider.Interface.Homescreen.getStretchScreens();
 
         mUsePagingTouchSlop = false;
 
@@ -354,28 +355,34 @@ public class Workspace extends PagedView
         TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.Workspace, defStyle, 0);
 
+        int[] cellCount = new int[2];
         if (LauncherApplication.isScreenLarge()) {
-            int[] cellCount = getCellCountsForLarge(context);
-            cellCountX = cellCount[0];
-            cellCountY = cellCount[1];
+            cellCount = getCellCountsForLarge(context);
+        } else if (mStretchScreens) {
+            cellCount = getCellCounts(context);
         }
+
+        cellCountX = cellCount[0];
+        cellCountY = cellCount[1];
+
+        LauncherModel.updateMaxWorkspaceLayoutCells(cellCountX, cellCountY);
 
         mSpringLoadedShrinkFactor =
             res.getInteger(R.integer.config_workspaceSpringLoadShrinkPercentage) / 100.0f;
         mCameraDistance = res.getInteger(R.integer.config_cameraDistance);
 
         // if the value is manually specified, use that instead
-        cellCountX = a.getInt(R.styleable.Workspace_cellCountX, cellCountX);
-        cellCountY = a.getInt(R.styleable.Workspace_cellCountY, cellCountY);
+        if (!mStretchScreens || cellCountX < 3 || cellCountY < 3) {
+            cellCountX = a.getInt(R.styleable.Workspace_cellCountX, cellCountX);
+            cellCountY = a.getInt(R.styleable.Workspace_cellCountY, cellCountY);
+        }
         a.recycle();
 
         setOnHierarchyChangeListener(this);
 
         // if there is a value set it the preferences, use that instead
-        if (!LauncherApplication.isScreenLarge()) {
-            cellCountX = PreferencesProvider.Interface.Homescreen.getCellCountX(cellCountX);
-            cellCountY = PreferencesProvider.Interface.Homescreen.getCellCountY(cellCountY);
-        }
+        cellCountX = PreferencesProvider.Interface.Homescreen.getCellCountX(cellCountX);
+        cellCountY = PreferencesProvider.Interface.Homescreen.getCellCountY(cellCountY);
 
         LauncherModel.updateWorkspaceLayoutCells(cellCountX, cellCountY);
         setHapticFeedbackEnabled(false);
@@ -387,7 +394,6 @@ public class Workspace extends PagedView
             mDefaultHomescreen = mNumberHomescreens / 2;
         }
 
-        mStretchScreens = PreferencesProvider.Interface.Homescreen.getStretchScreens();
         mShowSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar();
         mResizeAnyWidget = PreferencesProvider.Interface.Homescreen.getResizeAnyWidget();
         mHideIconLabels = PreferencesProvider.Interface.Homescreen.getHideIconLabels();
@@ -441,6 +447,25 @@ public class Workspace extends PagedView
         cellCount[1] = 1;
         while (actionBarHeight + CellLayout.heightInLandscape(res, cellCount[1] + 1)
                 <= smallestScreenDim - systemBarHeight) {
+            cellCount[1]++;
+        }
+        return cellCount;
+    }
+
+    public static int[] getCellCounts(Context context) {
+        float childrenScale = PreferencesProvider.Interface.Homescreen.getIconScale(100) / 100f;
+
+        int[] cellCount = new int[2];
+
+        cellCount[0] = 1;
+        while (CellLayout.calculateMaxCellWidth(context, cellCount[0]) > (int) (childrenScale *
+                context.getResources().getDimensionPixelSize(R.dimen.workspace_cell_width_port))) {
+            cellCount[0]++;
+        }
+
+        cellCount[1] = 1;
+        while (CellLayout.calculateMaxCellHeight(context, cellCount[1]) > (int) (childrenScale *
+                context.getResources().getDimensionPixelSize(R.dimen.workspace_cell_width_port))) {
             cellCount[1]++;
         }
         return cellCount;

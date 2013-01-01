@@ -37,9 +37,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.os.Parcelable;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.IWindowManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewDebug;
@@ -1003,6 +1006,62 @@ public class CellLayout extends ViewGroup {
         int height = (int) (getResources().getConfiguration().screenHeightDp *
                 LauncherApplication.getScreenDensity()) - searchBarHeight - dockHeight;
         return height / mCountY;
+    }
+
+    public static int calculateMaxCellWidth(Context context, int countX) {
+        boolean hasNavBar = false;
+        boolean hasSysNavBar = false;
+        IWindowManager windowManager = IWindowManager.Stub.asInterface(
+                ServiceManager.getService(Context.WINDOW_SERVICE));
+        try {
+            hasNavBar = windowManager.hasNavigationBar();
+            hasSysNavBar = windowManager.hasSystemNavBar();
+        } catch (RemoteException e) {
+        }
+        int systemBarHeight = context.getResources().getDimensionPixelSize(hasSysNavBar ?
+                com.android.internal.R.dimen.navigation_bar_height :
+                com.android.internal.R.dimen.status_bar_height);
+        int navigationBarHeight = hasNavBar ?
+                context.getResources().getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height) : 0;
+
+        int screenWidth = (int) (context.getResources().getConfiguration().screenWidthDp *
+                LauncherApplication.getScreenDensity());
+        int screenHeight = (int) (context.getResources().getConfiguration().screenHeightDp *
+                LauncherApplication.getScreenDensity());
+        int width = ((screenWidth > screenHeight) ? screenHeight + systemBarHeight + navigationBarHeight : screenWidth);
+        return width / countX;
+    }
+
+    public static int calculateMaxCellHeight(Context context, int countY) {
+        boolean hasNavBar = false;
+        boolean hasSysNavBar = false;
+        IWindowManager windowManager = IWindowManager.Stub.asInterface(
+                ServiceManager.getService(Context.WINDOW_SERVICE));
+        try {
+            hasNavBar = windowManager.hasNavigationBar();
+            hasSysNavBar = windowManager.hasSystemNavBar();
+        } catch (RemoteException e) {
+        }
+        int systemBarHeight = context.getResources().getDimensionPixelSize(hasSysNavBar ?
+                com.android.internal.R.dimen.navigation_bar_height :
+                com.android.internal.R.dimen.status_bar_height);
+        int navigationBarHeight = (hasNavBar && (context.getResources().getConfiguration().smallestScreenWidthDp
+                * LauncherApplication.getScreenDensity()) >= 600) ?
+                context.getResources().getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height) : 0;
+
+        boolean landscapeDockOnBottom = PreferencesProvider.Interface.Dock.getLandscapeDockOnBottom();
+        boolean showSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar();
+        int searchBarHeight = !landscapeDockOnBottom ? 0 : (showSearchBar
+                ? context.getResources().getDimensionPixelSize(R.dimen.qsb_bar_height_top) : 0);
+        int dockHeight = !landscapeDockOnBottom ? 0 :
+                context.getResources().getDimensionPixelSize(
+                R.dimen.button_bar_height);
+        int screenWidth = (int) (context.getResources().getConfiguration().screenWidthDp *
+                LauncherApplication.getScreenDensity());
+        int screenHeight = (int) (context.getResources().getConfiguration().screenHeightDp *
+                LauncherApplication.getScreenDensity());
+        int height = ((screenWidth > screenHeight) ? screenHeight : screenWidth - systemBarHeight- navigationBarHeight) - searchBarHeight - dockHeight;
+        return height / countY;
     }
 
     @Override

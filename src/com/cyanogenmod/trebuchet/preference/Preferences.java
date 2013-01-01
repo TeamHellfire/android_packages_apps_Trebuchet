@@ -42,6 +42,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.cyanogenmod.trebuchet.LauncherApplication;
+import com.cyanogenmod.trebuchet.LauncherModel;
 import com.cyanogenmod.trebuchet.preference.DoubleNumberPickerPreference;
 import com.cyanogenmod.trebuchet.R;
 
@@ -113,6 +114,8 @@ public class Preferences extends PreferenceActivity
     }
 
     public static class HomescreenFragment extends PreferenceFragment {
+        private static DoubleNumberPickerPreference mHomescreenGrid;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -120,6 +123,14 @@ public class Preferences extends PreferenceActivity
             addPreferencesFromResource(R.xml.preferences_homescreen);
 
             PreferenceScreen preferenceScreen = getPreferenceScreen();
+
+            mHomescreenGrid = (DoubleNumberPickerPreference)
+                    findPreference("ui_homescreen_grid");
+            mHomescreenGrid.setDefault1(LauncherModel.getCellCountY());
+            mHomescreenGrid.setDefault2(LauncherModel.getCellCountX());
+            mHomescreenGrid.setMax1(LauncherModel.getMaxCellCountY());
+            mHomescreenGrid.setMax2(LauncherModel.getMaxCellCountX());
+
             if (LauncherApplication.isScreenLarge()) {
                 preferenceScreen.removePreference(findPreference("ui_homescreen_grid"));
             }
@@ -190,11 +201,18 @@ public class Preferences extends PreferenceActivity
     }
 
     public static class DockFragment extends PreferenceFragment {
+        private static NumberPickerPreference mHotseatSize;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
             addPreferencesFromResource(R.xml.preferences_dock);
+
+            mHotseatSize = (NumberPickerPreference)
+                    findPreference("ui_dock_icons");
+            mHotseatSize.setMax(LauncherModel.getMaxCellCountX());
+            mHotseatSize.setDefault(LauncherModel.getCellCountX());
         }
     }
 

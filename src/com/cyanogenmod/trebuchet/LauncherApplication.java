@@ -44,7 +44,7 @@ public class LauncherApplication extends Application {
         super.onCreate();
 
         // set sIsScreenXLarge and sScreenDensity *before* creating icon cache
-        sIsScreenLarge = getResources().getBoolean(R.bool.is_large_screen);
+        sIsScreenLarge = false;//getResources().getBoolean(R.bool.is_large_screen);
         sScreenDensity = getResources().getDisplayMetrics().density;
 
         mIconCache = new IconCache(this);
