@@ -52,7 +52,7 @@ public class Hotseat extends PagedView {
     public Hotseat(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mFadeInAdjacentScreens = false;
+        mFadeInAdjacentScreens = true;
         mHandleScrollIndicator = true;
 
         int hotseatPages = PreferencesProvider.Interface.Dock.getNumberPages();
