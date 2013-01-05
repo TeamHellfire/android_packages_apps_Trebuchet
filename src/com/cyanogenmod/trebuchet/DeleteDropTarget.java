@@ -38,14 +38,15 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
+import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
 import com.cyanogenmod.trebuchet.R;
 
 public class DeleteDropTarget extends ButtonDropTarget {
-    private static int DELETE_ANIMATION_DURATION = 285;
-    private static int FLING_DELETE_ANIMATION_DURATION = 350;
-    private static float FLING_TO_DELETE_FRICTION = 0.035f;
-    private static int MODE_FLING_DELETE_TO_TRASH = 0;
-    private static int MODE_FLING_DELETE_ALONG_VECTOR = 1;
+    private static final int DELETE_ANIMATION_DURATION = 285;
+    private static final int FLING_DELETE_ANIMATION_DURATION = 350;
+    private static final float FLING_TO_DELETE_FRICTION = 0.035f;
+    private static final int MODE_FLING_DELETE_TO_TRASH = 0;
+    private static final int MODE_FLING_DELETE_ALONG_VECTOR = 1;
 
     private final int mFlingDeleteMode = MODE_FLING_DELETE_ALONG_VECTOR;
 
@@ -91,10 +92,11 @@ public class DeleteDropTarget extends ButtonDropTarget {
         mRemoveActiveDrawable = r.getDrawable(R.drawable.ic_launcher_clear_active_holo);
         mRemoveNormalDrawable = r.getDrawable(R.drawable.ic_launcher_clear_normal_holo);
 
-        // Remove the text in the Phone UI in landscape
+        // Remove the text in landscape
+        boolean bottomDock = PreferencesProvider.Interface.Dock.getLandscapeDockOnBottom();
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (!LauncherApplication.isScreenLarge()) {
+            if (!bottomDock) {
                 setText("");
             }
         }

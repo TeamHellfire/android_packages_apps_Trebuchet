@@ -26,6 +26,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
 import com.cyanogenmod.trebuchet.R;
 
 public class InfoDropTarget extends ButtonDropTarget {
@@ -53,10 +54,11 @@ public class InfoDropTarget extends ButtonDropTarget {
         mDrawable = (TransitionDrawable) getCurrentDrawable();
         mDrawable.setCrossFadeEnabled(true);
 
-        // Remove the text in the Phone UI in landscape
+        // Remove the text in landscape
+        boolean bottomDock = PreferencesProvider.Interface.Dock.getLandscapeDockOnBottom();
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (!LauncherApplication.isScreenLarge()) {
+            if (!bottomDock) {
                 setText("");
             }
         }

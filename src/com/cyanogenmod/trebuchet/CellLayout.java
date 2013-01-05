@@ -984,9 +984,10 @@ public class CellLayout extends ViewGroup {
         boolean landscape = LauncherApplication.isScreenLandscape(getContext());
         boolean landscapeDockOnBottom = landscape && PreferencesProvider.Interface.Dock.getLandscapeDockOnBottom();
         boolean showSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar();
+        boolean showDock = PreferencesProvider.Interface.Dock.getShowDock();
         int searchBarWidth = (landscape && !landscapeDockOnBottom) ? (showSearchBar
                 ? getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0) : 0;
-        int dockWidth = (landscape && !landscapeDockOnBottom) ?
+        int dockWidth = (landscape && !landscapeDockOnBottom && showDock) ?
                 getResources().getDimensionPixelSize(
                 R.dimen.button_bar_height) : 0;
         int width = (int) (getResources().getConfiguration().screenWidthDp *
@@ -998,9 +999,10 @@ public class CellLayout extends ViewGroup {
         boolean landscape = LauncherApplication.isScreenLandscape(getContext());
         boolean landscapeDockOnBottom = landscape && PreferencesProvider.Interface.Dock.getLandscapeDockOnBottom();
         boolean showSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar();
+        boolean showDock = PreferencesProvider.Interface.Dock.getShowDock();
         int searchBarHeight = (landscape && !landscapeDockOnBottom) ? 0 : (showSearchBar
                 ? getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0);
-        int dockHeight = (landscape && !landscapeDockOnBottom) ? 0 :
+        int dockHeight = ((landscape && !landscapeDockOnBottom) || !showDock) ? 0 :
                 getResources().getDimensionPixelSize(
                 R.dimen.button_bar_height);
         int height = (int) (getResources().getConfiguration().screenHeightDp *
@@ -1051,9 +1053,10 @@ public class CellLayout extends ViewGroup {
 
         boolean landscapeDockOnBottom = PreferencesProvider.Interface.Dock.getLandscapeDockOnBottom();
         boolean showSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar();
+        boolean showDock = PreferencesProvider.Interface.Dock.getShowDock();
         int searchBarHeight = !landscapeDockOnBottom ? 0 : (showSearchBar
                 ? context.getResources().getDimensionPixelSize(R.dimen.qsb_bar_height_top) : 0);
-        int dockHeight = !landscapeDockOnBottom ? 0 :
+        int dockHeight = (!landscapeDockOnBottom || !showDock) ? 0 :
                 context.getResources().getDimensionPixelSize(
                 R.dimen.button_bar_height);
         int screenWidth = (int) (context.getResources().getConfiguration().screenWidthDp *

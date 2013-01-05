@@ -313,6 +313,7 @@ public final class Launcher extends Activity
         = new HideFromAccessibilityHelper();
     // Preferences
     private boolean mShowSearchBar;
+    private boolean mShowHotseat;
     private boolean mShowDockDivider;
     private boolean mHideIconLabels;
     private boolean mAutoRotate;
@@ -395,7 +396,8 @@ public final class Launcher extends Activity
         mPaused = false;
         // Preferences
         mShowSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar();
-        mShowDockDivider = PreferencesProvider.Interface.Dock.getShowDivider();
+        mShowHotseat = PreferencesProvider.Interface.Dock.getShowDock();
+        mShowDockDivider = PreferencesProvider.Interface.Dock.getShowDivider() && mShowHotseat;
         mHideIconLabels = PreferencesProvider.Interface.Homescreen.getHideIconLabels();
         mAutoRotate = PreferencesProvider.Interface.General.getAutoRotate(getResources().getBoolean(R.bool.allow_rotation));
         mFullscreenMode = PreferencesProvider.Interface.General.getFullscreenMode();
@@ -947,6 +949,10 @@ public final class Launcher extends Activity
         // Hide the search divider if we are hiding search bar
         if (!mShowSearchBar && mQsbDivider != null && getCurrentOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
             mQsbDivider.setVisibility(View.GONE);
+        }
+
+        if (!mShowHotseat) {
+            mHotseat.setVisibility(View.GONE);
         }
 
         if (!mShowDockDivider && mDockDivider != null) {
@@ -2814,7 +2820,7 @@ public final class Launcher extends Activity
 
                 @Override
                 public void onAnimationStart(Animator animation) {
-                    updateWallpaperVisibility(true);
+                    updateWallpaperVisibility(!mWorkspace.isRenderingWallpaper());
 
                     if (mWorkspace != null && !springLoaded && !LauncherApplication.isScreenLarge()) {
                         // Hide the workspace scrollbar
@@ -3246,7 +3252,7 @@ public final class Launcher extends Activity
      * Shows the hotseat area.
      */
     void showHotseat(boolean animated) {
-        if (!LauncherApplication.isScreenLarge()) {
+        if (mShowHotseat) {
             if (animated) {
                 if (mHotseat.getAlpha() != 1f) {
                     int duration = 0;
@@ -3265,7 +3271,7 @@ public final class Launcher extends Activity
      * Hides the hotseat area.
      */
     void hideHotseat(boolean animated) {
-        if (!LauncherApplication.isScreenLarge()) {
+        if (mShowHotseat) {
             if (animated) {
                 if (mHotseat.getAlpha() != 0f) {
                     int duration = 0;

@@ -302,6 +302,7 @@ public class Workspace extends PagedView
     private int mDefaultHomescreen;
     private boolean mStretchScreens;
     private boolean mShowSearchBar;
+    private boolean mShowHotseat;
     private boolean mResizeAnyWidget;
     private boolean mHideIconLabels;
     private boolean mScrollWallpaper;
@@ -395,6 +396,7 @@ public class Workspace extends PagedView
         }
 
         mShowSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar();
+        mShowHotseat = PreferencesProvider.Interface.Dock.getShowDock();
         mResizeAnyWidget = PreferencesProvider.Interface.Homescreen.getResizeAnyWidget();
         mHideIconLabels = PreferencesProvider.Interface.Homescreen.getHideIconLabels();
         mTransitionEffect = PreferencesProvider.Interface.Homescreen.Scrolling.getTransitionEffect(
@@ -409,7 +411,7 @@ public class Workspace extends PagedView
         mShowScrollingIndicator = PreferencesProvider.Interface.Homescreen.Indicator.getShowScrollingIndicator();
         mFadeScrollingIndicator = PreferencesProvider.Interface.Homescreen.Indicator.getFadeScrollingIndicator();
         mScrollingIndicatorPosition = PreferencesProvider.Interface.Homescreen.Indicator.getScrollingIndicatorPosition();
-        mShowDockDivider = PreferencesProvider.Interface.Dock.getShowDivider();
+        mShowDockDivider = PreferencesProvider.Interface.Dock.getShowDivider() && mShowHotseat;
 
         initWorkspace();
         checkWallpaper();
@@ -561,6 +563,12 @@ public class Workspace extends PagedView
             setPadding(paddingLeft, paddingTop, getPaddingRight(), getPaddingBottom());
         }
 
+        if (!mShowHotseat) {
+            int paddingRight = 0;
+            int paddingBottom = 0;
+            setPadding(getPaddingLeft(), getPaddingTop(), paddingRight, paddingBottom);
+        }
+
         if (!mShowScrollingIndicator) {
             disableScrollingIndicator();
         }
@@ -593,6 +601,10 @@ public class Workspace extends PagedView
 
         // Make sure wallpaper gets redrawn to avoid ghost wallpapers
         invalidate();
+    }
+
+    public boolean isRenderingWallpaper() {
+        return mWallpaperHack && mWallpaperBitmap != null;
     }
 
     @Override
@@ -1116,8 +1128,8 @@ public class Workspace extends PagedView
     }
 
     private void updateWallpaperOffsets() {
-        boolean updateNow = false;
-        boolean keepUpdating = true;
+        boolean updateNow;
+        boolean keepUpdating;
         if (mUpdateWallpaperOffsetImmediately) {
             updateNow = true;
             keepUpdating = false;
