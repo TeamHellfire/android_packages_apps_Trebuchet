@@ -505,7 +505,6 @@ public class Workspace extends PagedView
         updateChildrenLayersEnabled(false);
         mLauncher.lockScreenOrientation();
         setChildrenBackgroundAlphaMultipliers(1f);
-        mLauncher.getHotseat().setChildrenOutlineAlpha(1f);
         // Prevent any Un/InstallShortcutReceivers from updating the db while we are dragging
         InstallShortcutReceiver.enableInstallQueue();
         UninstallShortcutReceiver.enableUninstallQueue();
@@ -3416,6 +3415,8 @@ public class Workspace extends PagedView
                 }
             }
         }
+
+        mLauncher.getHotseat().setChildrenOutlineAlpha(mLauncher.isHotseatLayout(layout) ? 1f : 0f);
 
         // Handle the drag over
         if (mDragTargetLayout != null) {
