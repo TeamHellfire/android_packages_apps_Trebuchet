@@ -1988,8 +1988,14 @@ public final class Launcher extends Activity
         folderInfo.title = getText(R.string.folder_name);
 
         // Update the model
+        if (container == LauncherSettings.Favorites.CONTAINER_HOTSEAT &&
+                getHotseat().hasVerticalHotseat()) {
+            cellX = getHotseat().getCellYFromOrder(cellY);
+            cellY = 0;
+        }
         LauncherModel.addItemToDatabase(Launcher.this, folderInfo, container, screen, cellX, cellY,
                 false);
+
         sFolders.put(folderInfo.id, folderInfo);
 
         // Create the view

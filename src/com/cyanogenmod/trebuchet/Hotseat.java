@@ -104,7 +104,7 @@ public class Hotseat extends PagedView {
         return false;
     }
 
-    private boolean hasVerticalHotseat() {
+    public boolean hasVerticalHotseat() {
         return (mIsLandscape && !mLandscapeDockOnBottom && mTransposeLayoutWithOrientation);
     }
 

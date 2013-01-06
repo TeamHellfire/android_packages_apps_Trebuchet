@@ -2958,8 +2958,14 @@ public class Workspace extends PagedView
                         }
                     }
 
-                    LauncherModel.moveItemInDatabase(mLauncher, info, container, screen, lp.cellX,
-                            lp.cellY);
+                    if (container == LauncherSettings.Favorites.CONTAINER_HOTSEAT &&
+                            mLauncher.getHotseat().hasVerticalHotseat()) {
+                        LauncherModel.moveItemInDatabase(mLauncher, info, container, screen,
+                                mLauncher.getHotseat().getCellYFromOrder(lp.cellY), 0);
+                    } else {
+                        LauncherModel.moveItemInDatabase(mLauncher, info, container, screen, lp.cellX,
+                                lp.cellY);
+                    }
                 } else {
                     // If we can't find a drop location, we return the item to its original position
                     CellLayout.LayoutParams lp = (CellLayout.LayoutParams) cell.getLayoutParams();
@@ -3780,15 +3786,21 @@ public class Workspace extends PagedView
             } else {
                 cellLayout.findCellForSpan(mTargetCell, 1, 1);
             }
+
             addInScreen(view, container, screen, mTargetCell[0], mTargetCell[1], info.spanX,
                     info.spanY, insertAtFirst);
             cellLayout.onDropChild(view);
             CellLayout.LayoutParams lp = (CellLayout.LayoutParams) view.getLayoutParams();
             cellLayout.getShortcutsAndWidgets().measureChild(view);
 
-
-            LauncherModel.addOrMoveItemInDatabase(mLauncher, info, container, screen,
-                    lp.cellX, lp.cellY);
+            if (container == LauncherSettings.Favorites.CONTAINER_HOTSEAT &&
+                    mLauncher.getHotseat().hasVerticalHotseat()) {
+                LauncherModel.addOrMoveItemInDatabase(mLauncher, info, container, screen,
+                        mLauncher.getHotseat().getCellYFromOrder(lp.cellY), 0);
+            } else {
+                LauncherModel.addOrMoveItemInDatabase(mLauncher, info, container, screen,
+                        lp.cellX, lp.cellY);
+            }
 
             if (d.dragView != null) {
                 // We wrap the animation call in the temporary set and reset of the current
@@ -4029,8 +4041,14 @@ public class Workspace extends PagedView
             // Null check required as the AllApps button doesn't have an item info
             if (info != null && info.requiresDbUpdate) {
                 info.requiresDbUpdate = false;
-                LauncherModel.modifyItemInDatabase(mLauncher, info, container, screen, info.cellX,
-                        info.cellY, info.spanX, info.spanY);
+                if (container == LauncherSettings.Favorites.CONTAINER_HOTSEAT &&
+                        mLauncher.getHotseat().hasVerticalHotseat()) {
+                    LauncherModel.modifyItemInDatabase(mLauncher, info, container, screen,
+                            mLauncher.getHotseat().getCellYFromOrder(info.cellY), 0, info.spanX, info.spanY);
+                } else {
+                    LauncherModel.modifyItemInDatabase(mLauncher, info, container, screen, info.cellX,
+                            info.cellY, info.spanX, info.spanY);
+                }
             }
         }
     }
