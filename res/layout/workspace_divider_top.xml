@@ -17,7 +17,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:paddingTop="@dimen/workspace_divider_padding_left"
     android:paddingBottom="@dimen/workspace_divider_padding_right"
-    android:paddingRight="@dimen/workspace_divider_padding_top"
-    android:paddingLeft="@dimen/workspace_divider_padding_bottom"
+    android:paddingRight="@dimen/workspace_width_gap_land"
+    android:paddingLeft="@dimen/workspace_width_gap_land"
     android:scaleType="fitXY"
     android:src="@drawable/hotseat_track_holo" />
