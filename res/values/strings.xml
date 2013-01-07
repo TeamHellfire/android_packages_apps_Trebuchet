@@ -410,10 +410,24 @@ s -->
     <string name="preferences_interface_dock_divider_title">Show dock divider</string>
     <string name="preferences_interface_dock_divider_summary">Show divider between homescreen and dock</string>
     <string name="preferences_interface_dock_bottom_title">Dock on bottom</string>
-    <string name="preferences_interface_dock_bottom_summary">Always show dock on the bottom of the screen</string>
+    <string name="preferences_interface_dock_bottom_summary">Show dock on the bottom of the screen in landscape</string>
 
     <!-- Icons -->
     <string name="preferences_interface_icons_title">Icons</string>
+
+    <!-- Gestures -->
+    <string name="preferences_interface_gestures_title">Gestures</string>
+    <string name="preferences_interface_gestures_homescreen_category">Homescreen gestures</string>
+    <string name="preferences_interface_gestures_double_tap_title">Double tap</string>
+    <string name="preferences_interface_gestures_swipe_up_title">Swipe up</string>
+    <string name="preferences_interface_gestures_swipe_down_title">Swipe down</string>
+    <string name="preferences_interface_gestures_no_action">No action</string>
+    <string name="preferences_interface_gestures_open_drawer">Open drawer</string>
+    <string name="preferences_interface_gestures_expand_notifications">Expand notifications</string>
+    <string name="preferences_interface_gestures_expand_quick_settings">Expand quick settings</string>
+    <string name="preferences_interface_gestures_preferences">Trebuchet settings</string>
+    <string name="preferences_interface_gestures_launch_application">Launch activity</string>
+    <string name="preferences_interface_gestures_settings">System settings</string>
 
     <!-- General -->
     <string name="preferences_interface_general_title">General</string>

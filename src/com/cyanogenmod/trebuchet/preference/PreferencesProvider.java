@@ -279,7 +279,18 @@ public final class PreferencesProvider {
         }
 
         public static class Icons {
+        }
 
+        public static class Gestures {
+            public static int getHomescreenDoubleTap() {
+                return Integer.parseInt(getString("ui_homescreen_doubletap", "0"));
+            }
+            public static int getHomescreenSwipeUp() {
+                return Integer.parseInt(getString("ui_homescreen_swipe_up", "0"));
+            }
+            public static int getHomescreenSwipeDown() {
+                return Integer.parseInt(getString("ui_homescreen_swipe_down", "0"));
+            }
         }
 
         public static class General {
