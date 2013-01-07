@@ -139,6 +139,7 @@ public class LauncherModel extends BroadcastReceiver {
     private static int mCellCountY;
     private static int mMaxCellCountX;
     private static int mMaxCellCountY;
+    private static int mHotseatCellCount;
 
     protected int mPreviousConfigMcc;
 
@@ -635,6 +636,18 @@ public class LauncherModel extends BroadcastReceiver {
     static void updateMaxWorkspaceLayoutCells(int shortAxisCellCount, int longAxisCellCount) {
         mMaxCellCountX = shortAxisCellCount;
         mMaxCellCountY = longAxisCellCount;
+    }
+
+    static int getHotseatCellCount() {
+        return mHotseatCellCount;
+    }
+
+    /**
+     * Updates the model orientation helper to take into account the current layout dimensions
+     * when performing local/canonical coordinate transformations.
+     */
+    static void updateHotseatLayoutCells(int cellCount) {
+        mHotseatCellCount = cellCount;
     }
 
     /**
@@ -1228,7 +1241,8 @@ public class LauncherModel extends BroadcastReceiver {
                 // Load workspace in reverse order to ensure that latest items are loaded first (and
                 // before any earlier duplicates)
                 final ItemInfo occupied[][][] =
-                        new ItemInfo[Launcher.MAX_SCREEN_COUNT + 1][mCellCountX + 1][mCellCountY + 1];
+                        new ItemInfo[Launcher.MAX_SCREEN_COUNT + 1][Math.max(mCellCountX, mHotseatCellCount)]
+                                [Math.max(mCellCountY, mHotseatCellCount)];
 
                 try {
                     final int idIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites._ID);
