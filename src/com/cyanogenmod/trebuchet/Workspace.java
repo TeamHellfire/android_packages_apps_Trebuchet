@@ -3787,6 +3787,12 @@ public class Workspace extends PagedView
                 cellLayout.findCellForSpan(mTargetCell, 1, 1);
             }
 
+            if (container == LauncherSettings.Favorites.CONTAINER_HOTSEAT &&
+                    mLauncher.getHotseat().hasVerticalHotseat()) {
+                mTargetCell[0] = mLauncher.getHotseat().getCellYFromOrder(mTargetCell[1]);
+                mTargetCell[1] = 0;
+            }
+
             addInScreen(view, container, screen, mTargetCell[0], mTargetCell[1], info.spanX,
                     info.spanY, insertAtFirst);
             cellLayout.onDropChild(view);
