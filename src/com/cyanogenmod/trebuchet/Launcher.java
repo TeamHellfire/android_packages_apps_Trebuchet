@@ -1522,7 +1522,9 @@ public final class Launcher extends Activity
 
             Runnable processIntent = new Runnable() {
                 public void run() {
-                    mWorkspace.setAlpha(1f);
+                    if (!alreadyOnHome) {
+                        mWorkspace.setAlpha(1f);
+                    }
                     Folder openFolder = mWorkspace.getOpenFolder();
                     // In all these cases, only animate if we're already on home
                     mWorkspace.exitWidgetResizeMode();

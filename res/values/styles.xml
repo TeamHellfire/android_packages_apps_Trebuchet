@@ -125,8 +125,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/qsb_bar_height_top</item>
         <item name="android:layout_gravity">top|center_horizontal</item>
-        <item name="android:paddingLeft">@dimen/qsb_padding_left</item>
-        <item name="android:paddingRight">@dimen/qsb_padding_right</item>
+        <item name="android:paddingLeft">@dimen/qsb_padding_top</item>
+        <item name="android:paddingRight">@dimen/qsb_padding_top</item>
     </style>
     <style name="SearchDropTargetBar">
         <item name="android:orientation">horizontal</item>
