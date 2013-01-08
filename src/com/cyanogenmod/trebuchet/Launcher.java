@@ -1369,6 +1369,7 @@ public final class Launcher extends Activity
 
         mAttached = true;
         mVisible = true;
+        mWorkspace.setAlpha(1f);
     }
 
     @Override
