@@ -164,4 +164,6 @@
     <dimen name="header_icon_width">28dp</dimen>
 
     <dimen name="qsb_bar_height_top">40dp</dimen>
+
+    <dimen name="qsb_padding_top">10dp</dimen>
 </resources>
