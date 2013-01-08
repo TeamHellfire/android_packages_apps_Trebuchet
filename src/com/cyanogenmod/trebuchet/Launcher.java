@@ -1522,6 +1522,7 @@ public final class Launcher extends Activity
 
             Runnable processIntent = new Runnable() {
                 public void run() {
+                    mWorkspace.setAlpha(1f);
                     Folder openFolder = mWorkspace.getOpenFolder();
                     // In all these cases, only animate if we're already on home
                     mWorkspace.exitWidgetResizeMode();
@@ -1555,14 +1556,14 @@ public final class Launcher extends Activity
                 }
             };
 
-            //if (alreadyOnHome && !mWorkspace.hasWindowFocus()) {
+            if (alreadyOnHome && !mWorkspace.hasWindowFocus()) {
                 // Delay processing of the intent to allow the status bar animation to finish
                 // first in order to avoid janky animations.
-            //    mWorkspace.postDelayed(processIntent, 350);
-            //} else {
+                mWorkspace.postDelayed(processIntent, 350);
+            } else {
                 // Process the intent immediately.
                 processIntent.run();
-            //}
+            }
 
         } else if (ACTION_LAUNCHER.equals(intent.getAction())) {
             Bundle extras = intent.getExtras();
