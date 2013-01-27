@@ -26,6 +26,7 @@ import android.animation.TimeAnimator;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -45,7 +46,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class RocketLauncher extends DreamService {
-    public static final boolean ROCKET_LAUNCHER = true;
+    public static Board sBoard;
 
     public static class Board extends FrameLayout
     {
@@ -368,7 +369,7 @@ public class RocketLauncher extends DreamService {
         @Override
         public boolean onInterceptTouchEvent(MotionEvent e) {
             // we want to eat touch events ourselves if we're in warp speed
-            return (!(ROCKET_LAUNCHER && mManeuveringThrusters));
+            return (!mManeuveringThrusters);
         }
 
         final Runnable mEngageWarp = new Runnable() {
@@ -398,10 +399,6 @@ public class RocketLauncher extends DreamService {
 
         @Override
         public boolean onTouchEvent(MotionEvent event) {
-            if (!ROCKET_LAUNCHER) {
-                return true;
-            }
-
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 if (!mManeuveringThrusters) {
                     mManeuveringThrusters = true;
@@ -419,16 +416,34 @@ public class RocketLauncher extends DreamService {
         super.onAttachedToWindow();
 
         setInteractive(true);
+        setScreenBright(false);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        final int longside = metrics.widthPixels > metrics.heightPixels 
-            ? metrics.widthPixels : metrics.heightPixels;
+        final int longside = metrics.widthPixels > metrics.heightPixels
+                ? metrics.widthPixels : metrics.heightPixels;
 
-        Board b = new Board(this, null, this);
-        setContentView(b, new ViewGroup.LayoutParams(longside, longside));
-        b.setX((metrics.widthPixels - longside) / 2);
-        b.setY((metrics.heightPixels - longside) / 2);
+        sBoard = new Board(this, null, this);
+        setContentView(sBoard, new ViewGroup.LayoutParams(longside, longside));
+        sBoard.setX((metrics.widthPixels - longside) / 2);
+        sBoard.setY((metrics.heightPixels - longside) / 2);
     }
+
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        final int longside = metrics.widthPixels > metrics.heightPixels
+                ? metrics.widthPixels : metrics.heightPixels;
+
+        setContentView(sBoard, new ViewGroup.LayoutParams(longside, longside));
+        sBoard.setX((metrics.widthPixels - longside) / 2);
+        sBoard.setY((metrics.heightPixels - longside) / 2);
+    }
+
 
 }
