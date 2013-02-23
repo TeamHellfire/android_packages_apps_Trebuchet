@@ -1273,7 +1273,7 @@ public class LauncherModel extends BroadcastReceiver {
                             (LauncherSettings.Favorites.SPANX);
                     final int spanYIndex = c.getColumnIndexOrThrow(
                             LauncherSettings.Favorites.SPANY);
-                    final int actionIndex = c.getColumnIndexOrThrow(
+                    final int actionIndex = c.getColumnIndex(
                             LauncherSettings.Favorites.LAUNCHER_ACTION);
                     //final int uriIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.URI);
                     //final int displayModeIndex = c.getColumnIndexOrThrow(
@@ -2235,7 +2235,8 @@ public class LauncherModel extends BroadcastReceiver {
         final LauncherActionInfo info = new LauncherActionInfo();
 
         info.title = c.getString(titleIndex);
-        info.action = LauncherAction.Action.valueOf(c.getString(actionIndex));
+        info.action = LauncherAction.Action.valueOf(c.getString((actionIndex == -1) ?
+				0 : actionIndex));
 
         int iconType = c.getInt(iconTypeIndex);
         switch (iconType) {

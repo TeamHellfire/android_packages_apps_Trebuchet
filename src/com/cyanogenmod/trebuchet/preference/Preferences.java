@@ -214,7 +214,7 @@ public class Preferences extends PreferenceActivity
 
             mHotseatSize = (NumberPickerPreference)
                     findPreference("ui_dock_icons");
-            mHotseatSize.setMax(LauncherModel.getMaxCellCountX());
+            mHotseatSize.setMax(LauncherModel.getMaxCellCountX() + 1);
             mHotseatSize.setDefault(LauncherModel.getCellCountX());
         }
     }
