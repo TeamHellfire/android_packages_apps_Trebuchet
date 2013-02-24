@@ -84,7 +84,11 @@ public class Hotseat extends PagedView {
         for (int i = 0; i < hotseatPages; i++) {
             CellLayout cl = (CellLayout) inflater.inflate(R.layout.hotseat_page, null);
             cl.setChildrenScale(childrenScale);
-            cl.setGridSize((!hasVerticalHotseat() ? mCellCount : 1), (hasVerticalHotseat() ? mCellCount : 1));
+            if (hasVerticalHotseat()) {
+                cl.setGridSize(1, mCellCount);
+            } else {
+                cl.setHotseatGridSize(mCellCount, 1);
+            }
             addView(cl);
         }
 

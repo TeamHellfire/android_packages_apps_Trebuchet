@@ -70,9 +70,9 @@
         launcher:pickerTitle2="@string/preferences_interface_homescreen_general_grid_columns_title"
         launcher:defaultValue1="3"
         launcher:defaultValue2="2"
-        launcher:max1="10"
+        launcher:max1="8"
         launcher:min1="1"
-        launcher:max2="10"
+        launcher:max2="5"
         launcher:min2="1" />
     <com.cyanogenmod.trebuchet.preference.DoubleNumberPickerPreference android:key="ui_app_widget_grid_land"
         android:title="@string/preferences_interface_drawer_app_widget_grid_land_title"
@@ -81,9 +81,9 @@
         launcher:pickerTitle2="@string/preferences_interface_homescreen_general_grid_columns_title"
         launcher:defaultValue1="2"
         launcher:defaultValue2="3"
-        launcher:max1="10"
+        launcher:max1="5"
         launcher:min1="1"
-        launcher:max2="10"
+        launcher:max2="8"
         launcher:min2="1" />
     <CheckBoxPreference android:key="ui_drawer_dismiss_on_tap"
         android:title="@string/preferences_interface_drawer_dismiss_on_tap_title"

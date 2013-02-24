@@ -350,6 +350,21 @@ public class CellLayout extends ViewGroup {
         requestLayout();
     }
 
+    public void setHotseatGridSize(int x, int y) {
+        mCountX = x;
+        mCountY = y;
+        mOccupied = new boolean[mCountX][mCountY];
+        mTmpOccupied = new boolean[mCountX][mCountY];
+        mTempRectStack.clear();
+
+        // Reset scaling if the grid has been modified. This is a folder or the hotseat
+        mCellWidth = getMaxCellWidth();
+        mCellHeight = mOriginalCellHeight;
+        mShortcutsAndWidgets.setCellDimensions(mCellWidth, mCellHeight, mWidthGap, mHeightGap);
+
+        requestLayout();
+    }
+
     private void invalidateBubbleTextView(BubbleTextView icon) {
         final int padding = icon.getPressedOrFocusedBackgroundPadding();
         invalidate(icon.getLeft() + getPaddingLeft() - padding,
