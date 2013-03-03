@@ -33,7 +33,7 @@ import java.lang.ref.WeakReference;
 public class LauncherApplication extends Application {
     public LauncherModel mModel;
     public IconCache mIconCache;
-    private static boolean sIsScreenLarge;
+    private static boolean sIsScreenLarge, sIsScreenXLarge;
     private static float sScreenDensity;
     private static int sLongPressTimeout = 300;
     private static final String sSharedPreferencesKey = "com.cyanogenmod.trebuchet.prefs";
@@ -45,6 +45,7 @@ public class LauncherApplication extends Application {
 
         // set sIsScreenXLarge and sScreenDensity *before* creating icon cache
         sIsScreenLarge = false;//getResources().getBoolean(R.bool.is_large_screen);
+        sIsScreenXLarge = getResources().getBoolean(R.bool.is_x_large_screen);
         sScreenDensity = getResources().getDisplayMetrics().density;
 
         mIconCache = new IconCache(this);
@@ -128,6 +129,10 @@ public class LauncherApplication extends Application {
 
     public static boolean isScreenLarge() {
         return sIsScreenLarge;
+    }
+
+    public static boolean isScreenXLarge() {
+        return sIsScreenXLarge;
     }
 
     public static boolean isScreenLandscape(Context context) {

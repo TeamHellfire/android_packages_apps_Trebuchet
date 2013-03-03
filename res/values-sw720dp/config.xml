@@ -4,6 +4,7 @@
     <integer name="hotseat_cell_count">9</integer>
     <integer name="hotseat_all_apps_index">4</integer>
     <bool name="config_largeHeap">true</bool>
+    <bool name="is_x_large_screen">true</bool>
 
 <!-- AllApps/Customize/AppsCustomize -->
     <!-- Out of 100, the percent to shrink the workspace during spring loaded mode. -->

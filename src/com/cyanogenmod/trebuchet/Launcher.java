@@ -4244,7 +4244,7 @@ public final class Launcher extends Activity
     /* Cling related */
     private boolean isClingsEnabled() {
         // disable clings when running in a test harness
-        return !ActivityManager.isRunningInTestHarness();
+        return false;//!ActivityManager.isRunningInTestHarness();
 
     }
 

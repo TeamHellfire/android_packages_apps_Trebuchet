@@ -1,6 +1,7 @@
 <resources>
     <bool name="config_largeHeap">false</bool>
     <bool name="is_large_screen">false</bool>
+    <bool name="is_x_large_screen">false</bool>
     <bool name="allow_rotation">false</bool>
 
 <!-- DragController -->

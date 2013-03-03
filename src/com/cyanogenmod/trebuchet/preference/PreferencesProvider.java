@@ -274,7 +274,8 @@ public final class PreferencesProvider {
                 return getBoolean("ui_dock_divider", true);
             }
             public static boolean getLandscapeDockOnBottom() {
-                return getBoolean("ui_land_dock_bottom", false);
+                return getBoolean("ui_land_dock_bottom",
+                        LauncherApplication.isScreenXLarge() ? true : false);
             }
         }
 
