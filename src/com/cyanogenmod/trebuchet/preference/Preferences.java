@@ -24,6 +24,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference;
@@ -216,6 +217,9 @@ public class Preferences extends PreferenceActivity
                     findPreference("ui_dock_icons");
             mHotseatSize.setMax(LauncherModel.getMaxCellCountX() + 1);
             mHotseatSize.setDefault(LauncherModel.getCellCountX());
+            CheckBoxPreference bottomDock = (CheckBoxPreference)
+                    findPreference("ui_land_dock_bottom");
+            bottomDock.setChecked(PreferencesProvider.Interface.Dock.getLandscapeDockOnBottom());
         }
     }
 
