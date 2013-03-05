@@ -57,6 +57,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -324,6 +325,8 @@ public final class Launcher extends Activity
     private int mHomescreenDoubleTap;
     private int mHomescreenSwipeUp;
     private int mHomescreenSwipeDown;
+
+    private String mDrawerBackActivity = "";
 
     private StatusBarManager mStatusBarManager;
 
@@ -994,9 +997,19 @@ public final class Launcher extends Activity
         // Setup AppsCustomize
         mAppsCustomizeTabHost = (AppsCustomizeTabHost)
                 findViewById(R.id.apps_customize_pane);
-        if (mDrawerShowWallpaper) {
-            mAppsCustomizeTabHost.setBackgroundColor(0x00000000);
+
+        if (!mDrawerShowWallpaper) {
+            mAppsCustomizeTabHost.setBackgroundColor(0xFF000000);
+        } else {
+            boolean highEndGfx = ActivityManager.isHighEndGfx();
+            if (!highEndGfx) {
+                mAppsCustomizeTabHost.setBackground(null);
+            } else if (mAppsCustomizeTabHost.getBackground() instanceof BitmapDrawable) {
+                // In order to save space, we make the background texture repeat in the Y direction
+                ((BitmapDrawable) mAppsCustomizeTabHost.getBackground()).setTileModeY(TileMode.REPEAT);
+            }
         }
+
         mAppsCustomizeContent = (AppsCustomizePagedView)
                 mAppsCustomizeTabHost.findViewById(R.id.apps_customize_pane_content);
         mAppsCustomizeContent.setup(this, dragController);
@@ -1516,6 +1529,10 @@ public final class Launcher extends Activity
             // also will cancel mWaitingForResult.
             closeSystemDialogs();
 
+            final boolean drawerIntent = intent.hasCategory("com.cyanogenmod.trebuchet.APP_DRAWER");
+            mDrawerBackActivity = drawerIntent ? intent.getStringExtra("component") : "";
+            if (mDrawerBackActivity.contains("trebuchet")) mDrawerBackActivity = "";
+
             final boolean alreadyOnHome =
                     ((intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
                         != Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
@@ -1535,10 +1552,10 @@ public final class Launcher extends Activity
 
                     // If we are already on home, then just animate back to the workspace,
                     // otherwise, just wait until onResume to set the state back to Workspace
-                    if (alreadyOnHome) {
+                    if (alreadyOnHome && !drawerIntent) {
                         showWorkspace(true);
                     } else {
-                        mOnResumeState = State.WORKSPACE;
+                        mOnResumeState = drawerIntent ? State.APPS_CUSTOMIZE : State.WORKSPACE;
                     }
 
                     final View v = getWindow().peekDecorView();
@@ -2088,6 +2105,15 @@ public final class Launcher extends Activity
 
     @Override
     public void onBackPressed() {
+        if (!mDrawerBackActivity.isEmpty()) {
+            Intent launchIntent = new Intent();
+            launchIntent.setComponent(ComponentName.unflattenFromString(mDrawerBackActivity));
+            launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mDrawerBackActivity = "";
+            startActivity(launchIntent);
+            return;
+        }
+
         if (isAllAppsVisible()) {
             showWorkspace(true);
         } else if (mWorkspace.getOpenFolder() != null) {
@@ -2952,6 +2978,7 @@ public final class Launcher extends Activity
             toView.setTranslationY(0.0f);
             toView.setScaleX(1.0f);
             toView.setScaleY(1.0f);
+            toView.setAlpha(1f);
             toView.setVisibility(View.VISIBLE);
             toView.bringToFront();
 

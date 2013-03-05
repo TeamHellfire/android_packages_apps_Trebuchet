@@ -54,6 +54,7 @@
         android:description="@string/permdesc_write_settings"/>
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -83,6 +84,7 @@
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.MONKEY"/>
+                <category android:name="com.cyanogenmod.trebuchet.APP_DRAWER" />
             </intent-filter>
         </activity>
 

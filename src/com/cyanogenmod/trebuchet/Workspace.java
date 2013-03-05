@@ -1114,16 +1114,10 @@ public class Workspace extends PagedView
         final int maxDim = Math.max(maxDims.x, maxDims.y);
         final int minDim = Math.min(minDims.x, minDims.y);
 
-        // We need to ensure that there is enough extra space in the wallpaper for the intended
-        // parallax effects
-        if (LauncherApplication.isScreenLarge()) {
-            mWallpaperWidth = (int) (maxDim * wallpaperTravelToScreenWidthRatio(maxDim, minDim));
-            mWallpaperHeight = maxDim;
-        } else {
-            int screens = mWallpaperSize;
-            mWallpaperWidth = Math.max(minDim * screens, maxDim);
-            mWallpaperHeight = maxDim;
-        }
+        int screens = mWallpaperSize;
+        mWallpaperWidth = Math.max(minDim * screens, maxDim);
+        mWallpaperHeight = maxDim;
+
         new Thread("setWallpaperDimension") {
             public void run() {
                 mWallpaperManager.suggestDesiredDimensions(mWallpaperWidth, mWallpaperHeight);
@@ -1155,19 +1149,7 @@ public class Workspace extends PagedView
         float scrollProgress =
             adjustedScrollX / (float) scrollRange;
 
-        if (LauncherApplication.isScreenLarge() && mIsStaticWallpaper) {
-            // The wallpaper travel width is how far, from left to right, the wallpaper will move
-            // at this orientation. On tablets in portrait mode we don't move all the way to the
-            // edges of the wallpaper, or otherwise the parallax effect would be too strong.
-            int wallpaperTravelWidth = Math.min(mWallpaperTravelWidth, mWallpaperWidth);
-
-            float offsetInDips = wallpaperTravelWidth * scrollProgress +
-                (mWallpaperWidth - wallpaperTravelWidth) / 2; // center it
-            float offset = offsetInDips / (float) mWallpaperWidth;
-            return offset;
-        } else {
-            return scrollProgress;
-        }
+        return scrollProgress;
     }
 
     private void syncWallpaperOffsetWithScroll() {
@@ -1202,7 +1184,7 @@ public class Workspace extends PagedView
         if (updateNow) {
             mWallpaperScroll = mWallpaperInterpolator.getCurrX();
             if (!mWallpaperHack && mWindowToken != null) {
-                mWallpaperManager.setWallpaperOffsets(mWindowToken, mWallpaperScroll, 0);
+                mWallpaperManager.setWallpaperOffsets(mWindowToken, mWallpaperScroll, mWallpaperInterpolator.getCurrY());
             }
         }
         if (keepUpdating) {
@@ -1263,11 +1245,14 @@ public class Workspace extends PagedView
 
     class WallpaperOffsetInterpolator {
         float mFinalHorizontalWallpaperOffset = 0.0f;
+        float mFinalVerticalWallpaperOffset = 0.5f;
         float mHorizontalWallpaperOffset = 0.0f;
+        float mVerticalWallpaperOffset = 0.5f;
         long mLastWallpaperOffsetUpdateTime;
         boolean mIsMovingFast;
         boolean mOverrideHorizontalCatchupConstant;
         float mHorizontalCatchupConstant = 0.35f;
+        float mVerticalCatchupConstant = 0.35f;
 
         public WallpaperOffsetInterpolator() {
         }
@@ -1280,18 +1265,16 @@ public class Workspace extends PagedView
             mHorizontalCatchupConstant = f;
         }
 
+        public void setVerticalCatchupConstant(float f) {
+            mVerticalCatchupConstant = f;
+        }
+
         public boolean computeScrollOffset() {
-            if (Float.compare(mHorizontalWallpaperOffset, mFinalHorizontalWallpaperOffset) == 0) {
+            if (Float.compare(mHorizontalWallpaperOffset, mFinalHorizontalWallpaperOffset) == 0 &&
+                    Float.compare(mVerticalWallpaperOffset, mFinalVerticalWallpaperOffset) == 0) {
                 mIsMovingFast = false;
                 return false;
             }
-
-            // Don't have any lag between workspace and wallpaper on non-large devices
-            if (!LauncherApplication.isScreenLarge()) {
-                mHorizontalWallpaperOffset = mFinalHorizontalWallpaperOffset;
-                return true;
-            }
-
             boolean isLandscape = mDisplaySize.x > mDisplaySize.y;
 
             long currentTime = System.currentTimeMillis();
@@ -1313,20 +1296,19 @@ public class Workspace extends PagedView
                 // slow
                 fractionToCatchUpIn1MsHorizontal = isLandscape ? 0.27f : 0.5f;
             }
+            float fractionToCatchUpIn1MsVertical = mVerticalCatchupConstant;
 
             fractionToCatchUpIn1MsHorizontal /= 33f;
+            fractionToCatchUpIn1MsVertical /= 33f;
 
             final float UPDATE_THRESHOLD = 0.00001f;
             float hOffsetDelta = mFinalHorizontalWallpaperOffset - mHorizontalWallpaperOffset;
-            boolean jumpToFinalValue = Math.abs(hOffsetDelta) < UPDATE_THRESHOLD;
+            float vOffsetDelta = mFinalVerticalWallpaperOffset - mVerticalWallpaperOffset;
+            boolean jumpToFinalValue = Math.abs(hOffsetDelta) < UPDATE_THRESHOLD &&
+                Math.abs(vOffsetDelta) < UPDATE_THRESHOLD;
 
-            if (!LauncherApplication.isScreenLarge() || jumpToFinalValue) {
-                mHorizontalWallpaperOffset = mFinalHorizontalWallpaperOffset;
-            } else {
-                float percentToCatchUpHorizontal =
-                    Math.min(1.0f, timeSinceLastUpdate * fractionToCatchUpIn1MsHorizontal);
-                mHorizontalWallpaperOffset += percentToCatchUpHorizontal * hOffsetDelta;
-            }
+            mHorizontalWallpaperOffset = mFinalHorizontalWallpaperOffset;
+            mVerticalWallpaperOffset = mFinalVerticalWallpaperOffset;
 
             mLastWallpaperOffsetUpdateTime = System.currentTimeMillis();
             return true;
@@ -1340,12 +1322,25 @@ public class Workspace extends PagedView
             return mFinalHorizontalWallpaperOffset;
         }
 
+        public float getCurrY() {
+            return mVerticalWallpaperOffset;
+        }
+
+        public float getFinalY() {
+            return mFinalVerticalWallpaperOffset;
+        }
+
         public void setFinalX(float x) {
             mFinalHorizontalWallpaperOffset = Math.max(0f, Math.min(x, 1.0f));
         }
 
+        public void setFinalY(float y) {
+            mFinalVerticalWallpaperOffset = Math.max(0f, Math.min(y, 1.0f));
+        }
+
         public void jumpToFinal() {
             mHorizontalWallpaperOffset = mFinalHorizontalWallpaperOffset;
+            mVerticalWallpaperOffset = mFinalVerticalWallpaperOffset;
         }
     }
 
