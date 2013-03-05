@@ -446,7 +446,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     protected void onUnhandledTap(MotionEvent ev) {
         if (PreferencesProvider.Interface.Drawer.getDismissDrawerOnTap()) {
             // Dismiss AppsCustomize if we tap
-            mLauncher.onBackPressed();
+            mLauncher.showAllApps(true);
         }
     }
 
