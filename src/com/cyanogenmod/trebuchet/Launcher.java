@@ -1001,13 +1001,8 @@ public final class Launcher extends Activity
         if (!mDrawerShowWallpaper) {
             mAppsCustomizeTabHost.setBackgroundColor(0xFF000000);
         } else {
-            boolean highEndGfx = ActivityManager.isHighEndGfx();
-            if (!highEndGfx) {
-                mAppsCustomizeTabHost.setBackground(null);
-            } else if (mAppsCustomizeTabHost.getBackground() instanceof BitmapDrawable) {
-                // In order to save space, we make the background texture repeat in the Y direction
-                ((BitmapDrawable) mAppsCustomizeTabHost.getBackground()).setTileModeY(TileMode.REPEAT);
-            }
+            mAppsCustomizeTabHost.setBackgroundColor(
+                    PreferencesProvider.Interface.Drawer.getDrawerColor());
         }
 
         mAppsCustomizeContent = (AppsCustomizePagedView)

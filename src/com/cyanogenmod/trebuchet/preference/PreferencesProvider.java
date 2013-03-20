@@ -151,7 +151,10 @@ public final class PreferencesProvider {
                 return getInt("ui_drawer_icon_scale", def);
             }
             public static boolean getDrawerShowWallpaper() {
-                return getBoolean("ui_drawer_background_show_wallpaper", false);
+                return true;//getBoolean("ui_drawer_background_show_wallpaper", false);
+            }
+            public static int getDrawerColor() {
+                return getInt("ui_drawer_background", 0xFF000000);
             }
             public static int getCellCountX(int def) {
                 String[] values = getString("ui_drawer_grid", "0|" + def).split("\\|");

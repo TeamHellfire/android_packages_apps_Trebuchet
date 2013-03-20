@@ -37,10 +37,9 @@
         launcher:min="60"
         launcher:max="100"
         android:defaultValue="100" />
-    <CheckBoxPreference android:key="ui_drawer_background_show_wallpaper"
-        android:title="@string/preferences_interface_drawer_show_wallpaper_title"
-        android:summary="@string/preferences_interface_drawer_show_wallpaper_summary"
-        android:defaultValue="false" />
+    <Preference android:key="ui_drawer_background"
+        android:title="@string/preferences_interface_drawer_background_title"
+        android:summary="@string/preferences_interface_drawer_background_summary" />
     <com.cyanogenmod.trebuchet.preference.DoubleNumberPickerPreference android:key="ui_drawer_grid"
         android:title="@string/preferences_interface_drawer_grid_title"
         android:summary="@string/preferences_interface_drawer_grid_summary"

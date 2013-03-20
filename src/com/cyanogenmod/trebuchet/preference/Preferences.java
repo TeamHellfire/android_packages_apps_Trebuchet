@@ -144,6 +144,7 @@ public class Preferences extends PreferenceActivity
     public static class DrawerFragment extends PreferenceFragment {
         private static DoubleNumberPickerPreference mPortraitAppGrid;
         private static DoubleNumberPickerPreference mLandscapeAppGrid;
+        private static Preference mDrawerColor;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -153,6 +154,7 @@ public class Preferences extends PreferenceActivity
                     findPreference("ui_drawer_grid");
             mLandscapeAppGrid = (DoubleNumberPickerPreference)
                     findPreference("ui_drawer_grid_land");
+            mDrawerColor = (Preference) findPreference("ui_drawer_background");
         }
 
         public void onResume() {
@@ -202,6 +204,29 @@ public class Preferences extends PreferenceActivity
             mLandscapeAppGrid.setMax1(cellCountYLand);
             mLandscapeAppGrid.setMax2(cellCountXLand);
         }
+
+        public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+            boolean value;
+
+            if (preference == mDrawerColor) {
+                ColorPickerDialog cp = new ColorPickerDialog(getActivity(),
+                        mDrawerColorListener, PreferencesProvider.Interface.Drawer.getDrawerColor());
+                cp.setDefaultColor(0xff000000);
+                cp.show();
+                return true;
+            }
+            return super.onPreferenceTreeClick(preferenceScreen, preference);
+        }
+
+        ColorPickerDialog.OnColorChangedListener mDrawerColorListener =
+            new ColorPickerDialog.OnColorChangedListener() {
+                public void colorChanged(int color) {
+                    mPreferences.edit().putInt("ui_drawer_background",
+                            color).commit();
+                }
+                public void colorUpdate(int color) {
+                }
+        };
     }
 
     public static class DockFragment extends PreferenceFragment {

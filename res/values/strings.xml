@@ -394,6 +394,8 @@ s -->
     <string name="preferences_interface_drawer_grid_summary">Choose the number of rows/columns in the app drawer</string>
     <string name="preferences_interface_drawer_dismiss_on_tap_title">Tap to dismiss</string>
     <string name="preferences_interface_drawer_dismiss_on_tap_summary">Tap empty space to dismiss drawer</string>
+    <string name="preferences_interface_drawer_background_title">Background color</string>
+    <string name="preferences_interface_drawer_background_summary">Choose the drawer background color</string>
 
     <!-- Dock -->
     <string name="preferences_interface_dock_title">Dock</string>
@@ -434,4 +436,7 @@ s -->
     <string name="preferences_interface_general_orientation_title">Auto-rotate screen</string>
     <string name="preferences_interface_general_fullscreen_title">Fullscreen mode</string>
     <string name="preferences_interface_general_fullscreen_summary">Hide the status bar to extend the homescreen</string>
+
+    <string name="dialog_indicator_color_title">Select color</string>
+    <string name="current_input_method">Default</string>
 </resources>
