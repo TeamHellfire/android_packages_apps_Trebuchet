@@ -396,6 +396,8 @@ s -->
     <string name="preferences_interface_drawer_dismiss_on_tap_summary">Tap empty space to dismiss drawer</string>
     <string name="preferences_interface_drawer_background_title">Background color</string>
     <string name="preferences_interface_drawer_background_summary">Choose the drawer background color</string>
+    <string name="preferences_interface_drawer_fade_title">Fade out</string>
+    <string name="preferences_interface_drawer_fade_summary">Animate fading out of background</string>
 
     <!-- Dock -->
     <string name="preferences_interface_dock_title">Dock</string>

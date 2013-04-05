@@ -223,6 +223,9 @@ public final class PreferencesProvider {
             public static boolean getDismissDrawerOnTap() {
                 return getBoolean("ui_drawer_dismiss_on_tap", false);
             }
+            public static boolean getFadeOut() {
+                return getBoolean("ui_drawer_fade", false);
+            }
             public static class Scrolling {
                 public static AppsCustomizePagedView.TransitionEffect getTransitionEffect(String def) {
                     try {

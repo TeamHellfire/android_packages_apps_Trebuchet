@@ -365,16 +365,10 @@ public class Workspace extends PagedView
                 R.styleable.Workspace, defStyle, 0);
 
         int[] cellCount = new int[2];
-        if (LauncherApplication.isScreenLarge()) {
-            cellCount = getCellCountsForLarge(context);
-        } else if (mStretchScreens) {
-            cellCount = getCellCounts(context);
-        }
+        cellCount = getCellCounts(context);
 
         cellCountX = cellCount[0];
         cellCountY = cellCount[1];
-
-        LauncherModel.updateMaxWorkspaceLayoutCells(cellCountX, cellCountY);
 
         mSpringLoadedShrinkFactor =
             res.getInteger(R.integer.config_workspaceSpringLoadShrinkPercentage) / 100.0f;
@@ -386,6 +380,8 @@ public class Workspace extends PagedView
             cellCountY = a.getInt(R.styleable.Workspace_cellCountY, cellCountY);
         }
         a.recycle();
+
+        LauncherModel.updateMaxWorkspaceLayoutCells(cellCountX, cellCountY);
 
         setOnHierarchyChangeListener(this);
 

@@ -325,6 +325,7 @@ public final class Launcher extends Activity
     private int mHomescreenDoubleTap;
     private int mHomescreenSwipeUp;
     private int mHomescreenSwipeDown;
+    private boolean mFadeOut;
 
     private String mDrawerBackActivity = "";
 
@@ -416,6 +417,7 @@ public final class Launcher extends Activity
         mHomescreenDoubleTap = PreferencesProvider.Interface.Gestures.getHomescreenDoubleTap();
         mHomescreenSwipeUp = PreferencesProvider.Interface.Gestures.getHomescreenSwipeUp();
         mHomescreenSwipeDown = PreferencesProvider.Interface.Gestures.getHomescreenSwipeDown();
+        mFadeOut = PreferencesProvider.Interface.Drawer.getFadeOut();
 
         if (PROFILE_STARTUP) {
             android.os.Debug.startMethodTracing(
@@ -2872,7 +2874,7 @@ public final class Launcher extends Activity
             mStateAnimation = LauncherAnimUtils.createAnimatorSet();
             mStateAnimation.play(scaleAnim).after(startDelay);
             mStateAnimation.play(alphaAnim).after(startDelay);
-            mStateAnimation.play(alphaAnimOut);
+            if (mFadeOut) mStateAnimation.play(alphaAnimOut);
 
             mStateAnimation.addListener(new AnimatorListenerAdapter() {
                 boolean animationCancelled = false;
@@ -2973,7 +2975,7 @@ public final class Launcher extends Activity
             toView.setTranslationY(0.0f);
             toView.setScaleX(1.0f);
             toView.setScaleY(1.0f);
-            toView.setAlpha(1f);
+            if (mFadeOut) toView.setAlpha(1f);
             toView.setVisibility(View.VISIBLE);
             toView.bringToFront();
 
@@ -3060,7 +3062,7 @@ public final class Launcher extends Activity
 
             mStateAnimation = LauncherAnimUtils.createAnimatorSet();
 
-            if (!(toState == State.WORKSPACE && mState == State.APPS_CUSTOMIZE_SPRING_LOADED)) {
+            if (mFadeOut && !(toState == State.WORKSPACE && mState == State.APPS_CUSTOMIZE_SPRING_LOADED)) {
                 mStateAnimation.play(alphaAnimOut);
             }
 
@@ -3163,7 +3165,7 @@ public final class Launcher extends Activity
         }
 
         mWorkspace.flashScrollingIndicator(animated);
-        mWorkspace.setAlpha(1f);
+        if (mFadeOut) mWorkspace.setAlpha(1f);
 
         // Change the state *after* we've called all the transition code
         mState = State.WORKSPACE;
