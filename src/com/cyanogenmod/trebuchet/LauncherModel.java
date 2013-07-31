@@ -646,15 +646,15 @@ public class LauncherModel extends BroadcastReceiver {
                 | (screen & 0xFF) << 16 | (localCellX & 0xFF) << 8 | (localCellY & 0xFF);
     }
 
-    static int getWorkspaceCellCountX() {
+    public static int getWorkspaceCellCountX() {
         return sWorkspaceCellCountX;
     }
 
-    static int getWorkspaceCellCountY() {
+    public static int getWorkspaceCellCountY() {
         return sWorkspaceCellCountY;
     }
 
-    static int getHotseatCellCount() {
+    public static int getHotseatCellCount() {
         return sHotseatCellCount;
     }
 
@@ -850,7 +850,7 @@ public class LauncherModel extends BroadcastReceiver {
              // and we would need to clear out the labels in all apps/workspace. Same handling as
              // above for ACTION_LOCALE_CHANGED
              Configuration currentConfig = context.getResources().getConfiguration();
-             if (mPreviousConfigMcc != currentConfig.mcc) {
+             if (mPreviousConfigMcc != currentConfig.mcc && mPreviousConfigMcc > 0 && currentConfig.mcc > 0) {
                    Log.d(TAG, "Reload apps on config change. curr_mcc:"
                        + currentConfig.mcc + " prevmcc:" + mPreviousConfigMcc);
                    forceReload();

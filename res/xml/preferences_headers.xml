@@ -34,6 +34,10 @@
             android:fragment="com.cyanogenmod.trebuchet.preference.Preferences$GeneralFragment"
             android:title="@string/preferences_interface_general_title" />
 
+    <header android:id="@+id/preferences_gestures_section"
+            android:fragment="com.cyanogenmod.trebuchet.preference.Preferences$GesturesFragment"
+            android:title="@string/preferences_interface_gestures_title" />
+
     <header android:id="@+id/preferences_application_section"
             android:title="@string/preferences_application_title" />
 

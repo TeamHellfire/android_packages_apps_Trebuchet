@@ -51,6 +51,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -418,6 +419,15 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
             a.getDimensionPixelSize(R.styleable.AppsCustomizePagedView_widgetCellHeightGap, 0);
         mWidgetCountX = a.getInt(R.styleable.AppsCustomizePagedView_widgetCountX, 2);
         mWidgetCountY = a.getInt(R.styleable.AppsCustomizePagedView_widgetCountY, 2);
+
+        if (LauncherApplication.isScreenLandscape(context)) {
+            mWidgetCountX = PreferencesProvider.Interface.Drawer.getWidgetCountXLand(mWidgetCountX);
+            mWidgetCountY = PreferencesProvider.Interface.Drawer.getWidgetCountYLand(mWidgetCountY);
+        } else {
+            mWidgetCountX = PreferencesProvider.Interface.Drawer.getWidgetCountX(mWidgetCountX);
+            mWidgetCountY = PreferencesProvider.Interface.Drawer.getWidgetCountY(mWidgetCountY);
+        }
+
         mClingFocusedX = a.getInt(R.styleable.AppsCustomizePagedView_clingFocusedX, 0);
         mClingFocusedY = a.getInt(R.styleable.AppsCustomizePagedView_clingFocusedY, 0);
         a.recycle();
@@ -438,6 +448,14 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         Context context = getContext();
         Resources r = context.getResources();
         setDragSlopeThreshold(r.getInteger(R.integer.config_appsCustomizeDragSlopeThreshold)/100f);
+    }
+
+    @Override
+    protected void onUnhandledTap(MotionEvent ev) {
+        if (PreferencesProvider.Interface.Drawer.getDismissDrawerOnTap()) {
+            // Dismiss AppsCustomize if we tap
+            mLauncher.showWorkspace(true);
+        }
     }
 
     /** Returns the item index of the center item on this page so that we can restore to this

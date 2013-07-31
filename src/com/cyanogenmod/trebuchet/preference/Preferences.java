@@ -17,13 +17,20 @@
 package com.cyanogenmod.trebuchet.preference;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +41,8 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.cyanogenmod.trebuchet.LauncherApplication;
+import com.cyanogenmod.trebuchet.LauncherModel;
+import com.cyanogenmod.trebuchet.preference.DoubleNumberPickerPreference;
 import com.cyanogenmod.trebuchet.R;
 
 import java.util.List;
@@ -43,7 +52,7 @@ public class Preferences extends PreferenceActivity
 
     private static final String TAG = "Trebuchet.Preferences";
 
-    private SharedPreferences mPreferences;
+    private static SharedPreferences mPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,20 +152,53 @@ public class Preferences extends PreferenceActivity
     }
 
     public static class DrawerFragment extends PreferenceFragment {
+        private static Preference mDrawerColor;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
             addPreferencesFromResource(R.xml.preferences_drawer);
+            mDrawerColor = (Preference) findPreference("ui_drawer_background");
         }
+
+        public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+            boolean value;
+
+            if (preference == mDrawerColor) {
+                ColorPickerDialog cp = new ColorPickerDialog(getActivity(),
+                        mDrawerColorListener, PreferencesProvider.Interface.Drawer.getDrawerColor());
+                cp.setDefaultColor(0xff000000);
+                cp.show();
+                return true;
+            }
+            return super.onPreferenceTreeClick(preferenceScreen, preference);
+        }
+
+        ColorPickerDialog.OnColorChangedListener mDrawerColorListener =
+            new ColorPickerDialog.OnColorChangedListener() {
+                public void colorChanged(int color) {
+                    mPreferences.edit().putInt("ui_drawer_background",
+                            color).commit();
+                }
+                public void colorUpdate(int color) {
+                }
+        };
     }
 
     public static class DockFragment extends PreferenceFragment {
+        private static NumberPickerPreference mHotseatSize;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
             addPreferencesFromResource(R.xml.preferences_dock);
+
+            mHotseatSize = (NumberPickerPreference)
+                    findPreference("ui_dock_icons");
+            mHotseatSize.setMax(LauncherModel.getHotseatCellCount());
+            mHotseatSize.setDefault(LauncherModel.getHotseatCellCount());
         }
     }
 
@@ -166,6 +208,93 @@ public class Preferences extends PreferenceActivity
             super.onCreate(savedInstanceState);
 
             addPreferencesFromResource(R.xml.preferences_general);
+        }
+    }
+
+    public static class GesturesFragment extends PreferenceFragment implements OnPreferenceChangeListener {
+        private ListPreference mHomescreenDoubleTap;
+        private ListPreference mHomescreenSwipeUp;
+        private ListPreference mHomescreenSwipeDown;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            addPreferencesFromResource(R.xml.preferences_gestures);
+
+            PreferenceScreen prefSet = getPreferenceScreen();
+
+            mHomescreenDoubleTap = (ListPreference) prefSet.findPreference("ui_homescreen_doubletap");
+            mHomescreenDoubleTap.setOnPreferenceChangeListener(this);
+            mHomescreenDoubleTap.setSummary(mHomescreenDoubleTap.getEntry());
+            mHomescreenSwipeDown = (ListPreference) prefSet.findPreference("ui_homescreen_swipe_down");
+            mHomescreenSwipeDown.setOnPreferenceChangeListener(this);
+            mHomescreenSwipeDown.setSummary(mHomescreenSwipeDown.getEntry());
+            mHomescreenSwipeUp = (ListPreference) prefSet.findPreference("ui_homescreen_swipe_up");
+            mHomescreenSwipeUp.setOnPreferenceChangeListener(this);
+            mHomescreenSwipeUp.setSummary(mHomescreenSwipeUp.getEntry());
+        }
+
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            if (preference == mHomescreenDoubleTap) {
+                CharSequence doubleTapIndex[] = mHomescreenDoubleTap.getEntries();
+                int doubleTapValue = Integer.parseInt((String) newValue);
+                if (doubleTapValue == 6) {
+                    // Pick an application
+                    Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                    mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                    pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                    startActivityForResult(pickIntent, 0);
+                }
+                CharSequence doubleTapSummary = doubleTapIndex[doubleTapValue];
+                mHomescreenDoubleTap.setSummary(doubleTapSummary);
+                return true;
+            } else if (preference == mHomescreenSwipeDown) {
+                CharSequence homeSwipeDownIndex[] = mHomescreenSwipeDown.getEntries();
+                int hSDValue = Integer.parseInt((String) newValue);
+                if (hSDValue == 6) {
+                    // Pick an application
+                    Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                    mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                    pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                    startActivityForResult(pickIntent, 2);
+                }
+                CharSequence homeSDSummary = homeSwipeDownIndex[hSDValue];
+                mHomescreenSwipeDown.setSummary(homeSDSummary);
+                return true;
+            } else if (preference == mHomescreenSwipeUp) {
+                CharSequence homeSwipeUpIndex[] = mHomescreenSwipeUp.getEntries();
+                int hSUValue = Integer.parseInt((String) newValue);
+                if (hSUValue == 6) {
+                    // Pick an application
+                    Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                    mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                    pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                    startActivityForResult(pickIntent, 1);
+                }
+                CharSequence homeSUSummary = homeSwipeUpIndex[hSUValue];
+                mHomescreenSwipeUp.setSummary(homeSUSummary);
+                return true;
+            }
+            return false;
+        }
+
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if (data != null) {
+                if (requestCode == 0) {
+                    mPreferences.edit().putString("double_tap_gesture_app",
+                            data.toUri(0)).commit();
+                } else if (requestCode == 1) {
+                    mPreferences.edit().putString("swipe_up_gesture_app",
+                            data.toUri(0)).commit();
+                } else if (requestCode == 2) {
+                    mPreferences.edit().putString("swipe_down_gesture_app",
+                            data.toUri(0)).commit();
+                }
+            }
         }
     }
 

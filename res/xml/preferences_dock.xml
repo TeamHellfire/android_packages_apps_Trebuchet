@@ -34,7 +34,7 @@
         android:summary="@string/preferences_interface_dock_default_page_summary"
         android:defaultValue="1"
         launcher:maxExternal="ui_dock_pages"
-        launcher:max="1"
+        launcher:max="3"
         launcher:min="1" />
     <!-- android:dependency="ui_dock_enabled" /-->
     <com.cyanogenmod.trebuchet.preference.NumberPickerPreference android:key="ui_dock_icons"
@@ -52,7 +52,7 @@
     <com.cyanogenmod.trebuchet.preference.SeekBarDialogPreference android:key="ui_dock_icon_scale"
         android:title="@string/preferences_interface_dock_icon_scale_title"
         android:summary="@string/preferences_interface_dock_icon_scale_summary"
-        launcher:min="80"
+        launcher:min="60"
         launcher:max="100"
         android:defaultValue="@integer/hotseat_item_scale_percentage" />
     <!-- android:dependency="ui_dock_enabled" /-->

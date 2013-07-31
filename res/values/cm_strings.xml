@@ -179,4 +179,43 @@
     <string name="effects_accordion">Accordion</string>
     <string name="effects_carousel_left">Carousel left</string>
     <string name="effects_carousel_right">Carousel right</string>
+    <string name="preferences_interface_homescreen_icon_scale_summary">Scale of icons on the homescreen</string>
+
+    <!-- Drawer -->
+    <string name="preferences_interface_drawer_icon_scale_summary">Scale of icons in the app drawer</string>
+    <string name="preferences_interface_drawer_show_wallpaper_title">Wallpaper background</string>
+    <string name="preferences_interface_drawer_show_wallpaper_summary">Show the wallpaper as the drawer background</string>
+    <string name="preferences_interface_drawer_grid_title">App grid size</string>
+    <string name="preferences_interface_drawer_grid_land_title">App grid size landscape</string>
+    <string name="preferences_interface_drawer_app_widget_grid_title">Widget grid size</string>
+    <string name="preferences_interface_drawer_app_widget_grid_land_title">Widget grid size landscape</string>
+    <string name="preferences_interface_drawer_grid_summary">Choose the number of rows/columns in the app drawer</string>
+    <string name="preferences_interface_drawer_dismiss_on_tap_title">Tap to dismiss</string>
+    <string name="preferences_interface_drawer_dismiss_on_tap_summary">Tap empty space to dismiss drawer</string>
+    <string name="preferences_interface_drawer_background_title">Background color</string>
+    <string name="preferences_interface_drawer_background_summary">Choose the drawer background color</string>
+    <string name="preferences_interface_drawer_fade_title">Fade out</string>
+    <string name="preferences_interface_drawer_fade_summary">Animate fading out of background</string>
+
+    <!-- Dock -->
+    <string name="preferences_interface_dock_bottom_title">Dock on bottom</string>
+    <string name="preferences_interface_dock_bottom_summary">Show dock on the bottom of the screen in landscape</string>
+
+    <!-- Gestures -->
+    <string name="preferences_interface_gestures_title">Gestures</string>
+    <string name="preferences_interface_gestures_homescreen_category">Homescreen gestures</string>
+    <string name="preferences_interface_gestures_double_tap_title">Double tap</string>
+    <string name="preferences_interface_gestures_swipe_up_title">Swipe up</string>
+    <string name="preferences_interface_gestures_swipe_down_title">Swipe down</string>
+    <string name="preferences_interface_gestures_no_action">No action</string>
+    <string name="preferences_interface_gestures_open_drawer">Open drawer</string>
+    <string name="preferences_interface_gestures_expand_notifications">Expand notifications</string>
+    <string name="preferences_interface_gestures_expand_quick_settings">Expand quick settings</string>
+    <string name="preferences_interface_gestures_preferences">Trebuchet settings</string>
+    <string name="preferences_interface_gestures_launch_application">Launch activity</string>
+    <string name="preferences_interface_gestures_settings">System settings</string>
+
+    <string name="dialog_indicator_color_title">Select color</string>
+    <string name="current_input_method">Default</string>
+    <string name="menu_app_drawer">App drawer</string>
 </resources>

@@ -112,4 +112,22 @@
         <item>horizontal</item>
         <item>vertical</item>
     </string-array>
+    <string-array name="preferences_interface_gestures_homescreen_entries">
+        <item>@string/preferences_interface_gestures_no_action</item>
+        <item>@string/preferences_interface_gestures_open_drawer</item>
+        <item>@string/preferences_interface_gestures_expand_notifications</item>
+        <item>@string/preferences_interface_gestures_expand_quick_settings</item>
+        <item>@string/preferences_interface_gestures_preferences</item>
+        <item>@string/preferences_interface_gestures_settings</item>
+        <item>@string/preferences_interface_gestures_launch_application</item>
+    </string-array>
+    <string-array name="preferences_interface_gestures_homescreen_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
 </resources>

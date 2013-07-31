@@ -56,7 +56,7 @@ public class Hotseat extends PagedView {
 
         final Resources res = getResources();
 
-        mFadeInAdjacentScreens = false;
+        mFadeInAdjacentScreens = true;
         mHandleScrollIndicator = true;
 
         mHotseatPages = PreferencesProvider.Interface.Dock.getNumberPages();

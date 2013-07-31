@@ -88,6 +88,9 @@ public final class PreferencesProvider {
             public static boolean getStretchScreens() {
                 return getBoolean("ui_homescreen_stretch_screens", true);
             }
+            public static int getIconScale(int def) {
+                return getInt("ui_icon_scale", def);
+            }
             public static boolean getShowSearchBar() {
                 return getBoolean("ui_homescreen_general_search", true);
             }
@@ -144,6 +147,9 @@ public final class PreferencesProvider {
             public static boolean getVertical() {
                 return getString("ui_drawer_orientation", "horizontal").equals("vertical");
             }
+            public static boolean getJoinWidgetsApps() {
+                return getBoolean("ui_drawer_widgets_join_apps", true);
+            }
             public static String getHiddenApps() {
                 return getString("ui_drawer_hidden_apps", "");
             }
@@ -153,8 +159,49 @@ public final class PreferencesProvider {
             public static boolean getRemoveWidgetsOfHiddenApps() {
                 return getBoolean("ui_drawer_remove_hidden_apps_widgets", true);
             }
-            public static boolean getJoinWidgetsApps() {
-                return getBoolean("ui_drawer_widgets_join_apps", true);
+            public static int getIconScale(int def) {
+                return getInt("ui_drawer_icon_scale", def);
+            }
+            public static int getDrawerColor() {
+                return getInt("ui_drawer_background", 0xFF000000);
+            }
+            public static int getWidgetCountX(int def) {
+                String[] values = getString("ui_app_widget_grid", "0|" + def).split("\\|");
+                try {
+                    return Integer.parseInt(values[1]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getWidgetCountY(int def) {
+                String[] values = getString("ui_app_widget_grid", def + "|0").split("\\|");
+                try {
+                    return Integer.parseInt(values[0]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getWidgetCountXLand(int def) {
+                String[] values = getString("ui_app_widget_grid_land", "0|" + def).split("\\|");
+                try {
+                    return Integer.parseInt(values[1]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getWidgetCountYLand(int def) {
+                String[] values = getString("ui_app_widget_grid_land", def + "|0").split("\\|");
+                try {
+                    return Integer.parseInt(values[0]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static boolean getDismissDrawerOnTap() {
+                return getBoolean("ui_drawer_dismiss_on_tap", false);
+            }
+            public static boolean getFadeOut() {
+                return getBoolean("ui_drawer_fade", false);
             }
             public static class Scrolling {
                 public static AppsCustomizePagedView.TransitionEffect getTransitionEffect(String def) {
@@ -215,7 +262,18 @@ public final class PreferencesProvider {
         }
 
         public static class Icons {
+        }
 
+        public static class Gestures {
+            public static int getHomescreenDoubleTap() {
+                return Integer.parseInt(getString("ui_homescreen_doubletap", "0"));
+            }
+            public static int getHomescreenSwipeUp() {
+                return Integer.parseInt(getString("ui_homescreen_swipe_up", "0"));
+            }
+            public static int getHomescreenSwipeDown() {
+                return Integer.parseInt(getString("ui_homescreen_swipe_down", "0"));
+            }
         }
 
         public static class General {

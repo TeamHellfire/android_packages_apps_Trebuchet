@@ -87,9 +87,11 @@ public class NumberPickerPreference extends DialogPreference {
 
         // No keyboard popup
         EditText textInput = (EditText) mNumberPicker.findViewById(com.android.internal.R.id.numberpicker_input);
-        textInput.setCursorVisible(false);
-        textInput.setFocusable(false);
-        textInput.setFocusableInTouchMode(false);
+        if (textInput != null) {
+            textInput.setCursorVisible(false);
+            textInput.setFocusable(false);
+            textInput.setFocusableInTouchMode(false);
+        }
 
         return view;
     }
@@ -101,4 +103,13 @@ public class NumberPickerPreference extends DialogPreference {
         }
     }
 
+    public void setMin(int min) {
+        mMin = min;
+    }
+    public void setMax(int max) {
+        mMax = max;
+    }
+    public void setDefault(int def) {
+        mDefault = def;
+    }
 }
