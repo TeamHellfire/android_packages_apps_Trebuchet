@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright (C) 2013 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +15,9 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- App copyright -->
-    <string name="application_copyright">Copyright \u00A9 2013 The CyanogenMod Project</string>
+    <string name="application_copyright">Copyright \u00A9 2013 The CyanogenMod Project With HellFire™</string>
     <!-- App version -->
-    <string name="application_version" translatable="false">1.0</string>
+    <string name="application_version" translatable="false">1.1</string>
 
     <!-- Menu button text. -->
     <string name="menu">Menu</string>
@@ -34,7 +34,7 @@
     <string name="menu_unlock_workspace">Unlock homescreen</string>
 
     <!-- Noun, menu item used to show the launcher preferences -->
-    <string name="menu_preferences">Trebuchet settings</string>
+    <string name="menu_preferences">HellFire™ Trebuchet settings</string>
 
     <!-- Noun, menu item used to sort apps by name -->
     <string name="menu_apps_sort_title">Name</string>
@@ -60,11 +60,11 @@
     <string name="workspace_locked">Homescreen is locked, unlock in settings to rearrange</string>
 
     <!-- Settings -->
-    <string name="preferences_title">Settings</string>
+    <string name="preferences_title">HellFire™ Settings</string>
     <!-- UI -->
-    <string name="preferences_interface_title">Interface</string>
+    <string name="preferences_interface_title">HellFire™ Interface</string>
     <!-- Application -->
-    <string name="preferences_application_title">App</string>
+    <string name="preferences_application_title">HellFire™ App</string>
 
     <!-- UI -->
     <!-- Homescreen -->
@@ -155,7 +155,7 @@
     <string name="preferences_interface_icons_title">Icons</string>
 
     <!-- Gestures -->
-    <string name="preferences_interface_gestures_title">Gestures</string>
+    <string name="preferences_interface_gestures_title">HellFire™ Gestures</string>
     <string name="preferences_interface_gestures_homescreen_category">Homescreen gestures</string>
     <string name="preferences_interface_gestures_double_tap_title">Double tap</string>
     <string name="preferences_interface_gestures_swipe_up_title">Swipe up</string>
