@@ -31,6 +31,7 @@ import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.SearchManager;
+import android.app.StatusBarManager;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
@@ -331,6 +332,11 @@ public final class Launcher extends Activity
     private boolean mAutoRotate;
     private boolean mLockWorkspace;
     private boolean mFullscreenMode;
+    private int mHomescreenDoubleTap;
+    private int mHomescreenSwipeUp;
+    private int mHomescreenSwipeDown;
+
+    private StatusBarManager mStatusBarManager;
 
     private boolean mWallpaperVisible;
 
@@ -412,7 +418,9 @@ public final class Launcher extends Activity
         mAutoRotate = PreferencesProvider.Interface.General.getAutoRotate(getResources().getBoolean(R.bool.allow_rotation));
         mLockWorkspace = PreferencesProvider.Interface.General.getLockWorkspace(getResources().getBoolean(R.bool.lock_workspace));
         mFullscreenMode = PreferencesProvider.Interface.General.getFullscreenMode();
-
+        mHomescreenDoubleTap = PreferencesProvider.Interface.Gestures.getHomescreenDoubleTap();
+        mHomescreenSwipeUp = PreferencesProvider.Interface.Gestures.getHomescreenSwipeUp();
+        mHomescreenSwipeDown = PreferencesProvider.Interface.Gestures.getHomescreenSwipeDown();
         if (PROFILE_STARTUP) {
             android.os.Debug.startMethodTracing(
                     Environment.getExternalStorageDirectory() + "/launcher");
@@ -467,6 +475,8 @@ public final class Launcher extends Activity
 
         // On large interfaces, we want the screen to auto-rotate based on the current orientation
         unlockScreenOrientation(true);
+
+        mStatusBarManager = (StatusBarManager) getSystemService(Context.STATUS_BAR_SERVICE);
     }
 
     protected void onUserLeaveHint() {
@@ -1007,6 +1017,27 @@ public final class Launcher extends Activity
         mWorkspace.setOnLongClickListener(this);
         mWorkspace.setup(dragController);
         dragController.addDragListener(mWorkspace);
+        if (mHomescreenDoubleTap != 0) {
+            mWorkspace.setOnDoubleTapCallback(new Runnable() {
+                public void run() {
+                    performGesture(mHomescreenDoubleTap, 0);
+                }
+            });
+        }
+        if (mHomescreenSwipeUp != 0) {
+            mWorkspace.setOnSwipeUpCallback(new Runnable() {
+                public void run() {
+                    performGesture(mHomescreenSwipeUp, 1);
+                }
+            });
+        }
+        if (mHomescreenSwipeDown != 0) {
+            mWorkspace.setOnSwipeDownCallback(new Runnable() {
+                public void run() {
+                    performGesture(mHomescreenSwipeDown, 2);
+                }
+            });
+        }
 
         // Get the search/delete bar
         mSearchDropTargetBar = (SearchDropTargetBar) mDragLayer.findViewById(R.id.qsb_bar);
@@ -1915,7 +1946,6 @@ public final class Launcher extends Activity
                 PreferencesProvider.Interface.General.setLockWorkspace(this, mLockWorkspace);
                 return true;
         }
-
 
         return super.onOptionsItemSelected(item);
     }
@@ -2912,6 +2942,18 @@ public final class Launcher extends Activity
                 setDuration(duration).
                 setInterpolator(new Workspace.ZoomOutInterpolator());
 
+            if (mWorkspace != null && !springLoaded) {
+                // Hide the workspace scrollbar
+                mWorkspace.hideScrollingIndicator(true);
+                hideDockDivider();
+                hideHotseat(true);
+            }
+
+            // Hide the search bar
+            if (mSearchDropTargetBar != null) {
+                mSearchDropTargetBar.hideSearchBar(false);
+            }
+
             toView.setVisibility(View.VISIBLE);
             toView.setAlpha(0f);
             final ObjectAnimator alphaAnim = LauncherAnimUtils
@@ -2953,18 +2995,8 @@ public final class Launcher extends Activity
                     dispatchOnLauncherTransitionEnd(fromView, animated, false);
                     dispatchOnLauncherTransitionEnd(toView, animated, false);
 
-                    if (mWorkspace != null && !springLoaded && !LauncherApplication.isScreenLarge()) {
-                        // Hide the workspace scrollbar
-                        mWorkspace.hideScrollingIndicator(true);
-                        hideDockDivider();
-                    }
                     if (!animationCancelled) {
                         updateWallpaperVisibility(false);
-                    }
-
-                    // Hide the search bar
-                    if (mSearchDropTargetBar != null) {
-                        mSearchDropTargetBar.hideSearchBar(false);
                     }
                 }
 
@@ -4361,6 +4393,56 @@ public final class Launcher extends Activity
                     editor.commit();
         }
         return preferencesChanged;
+    }
+
+    public void performGesture(int action, int index) {
+        switch (action) {
+            case 0:
+                break;
+            case 1:
+                showAllApps(true);
+                break;
+            case 2:
+                mStatusBarManager.expandNotificationsPanel();
+                break;
+            case 3:
+                mStatusBarManager.expandSettingsPanel();
+                break;
+            case 4:
+                Intent preferences = new Intent().setClass(this, Preferences.class);
+                preferences.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(preferences);
+                break;
+            case 5:
+                Intent settings = new Intent(android.provider.Settings.ACTION_SETTINGS);
+                settings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                startActivity(settings);
+                break;
+            case 6:
+                SharedPreferences prefs =
+                        getSharedPreferences(PreferencesProvider.PREFERENCES_KEY, Context.MODE_PRIVATE);
+                String shortcutUri = new String();
+                switch (index) {
+                    case 0:
+                        shortcutUri = prefs.getString("double_tap_gesture_app", "");
+                        break;
+                    case 1:
+                        shortcutUri = prefs.getString("swipe_up_gesture_app", "");
+                        break;
+                    case 2:
+                        shortcutUri = prefs.getString("swipe_down_gesture_app", "");
+                        break;
+                }
+                try {
+                    Intent launchIntent = Intent.parseUri(shortcutUri, 0);
+                    launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(launchIntent);
+                } catch (Exception e) {
+                }
+                break;
+        }
     }
 
     /**
