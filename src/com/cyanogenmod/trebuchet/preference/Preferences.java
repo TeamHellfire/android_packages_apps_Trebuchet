@@ -40,6 +40,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.cyanogenmod.trebuchet.IconPackHelper;
 import com.cyanogenmod.trebuchet.LauncherApplication;
 import com.cyanogenmod.trebuchet.LauncherModel;
 import com.cyanogenmod.trebuchet.preference.DoubleNumberPickerPreference;
@@ -170,11 +171,39 @@ public class Preferences extends PreferenceActivity
     }
 
     public static class GeneralFragment extends PreferenceFragment {
+        private static final String ICON_PACK_KEY = "ui_general_iconpack";
+        private Preference mIconPackPreference;
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
             addPreferencesFromResource(R.xml.preferences_general);
+            mIconPackPreference = findPreference(ICON_PACK_KEY);
+        }
+
+        @Override
+        public void onResume() {
+            int numIconPacks = IconPackHelper.getSupportedPackages(
+                    getActivity()).size();
+            if (numIconPacks > 0) {
+                mIconPackPreference.setSummary(
+                        R.string.preferences_interface_general_iconpack_summary);
+                mIconPackPreference.setEnabled(true);
+            } else {
+                mIconPackPreference.setSummary(R.string.no_iconpacks_summary);
+                mIconPackPreference.setEnabled(false);
+            }
+            super.onResume();
+        }
+
+
+        @Override
+        public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
+                Preference preference) {
+            if (preference.getKey().equals("ui_general_iconpack")) {
+                IconPackHelper.pickIconPack(getActivity());
+            }
+            return super.onPreferenceTreeClick(preferenceScreen, preference);
         }
     }
 
