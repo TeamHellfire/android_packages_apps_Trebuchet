@@ -3051,7 +3051,7 @@ public final class Launcher extends Activity
             if (mWorkspace != null && !springLoaded) {
                 // Hide the workspace scrollbar
                 mWorkspace.hideScrollingIndicator(true);
-                hideDockDivider(true);
+                hideDockDivider();
                 hideHotseat(true);
             }
 
