@@ -68,7 +68,8 @@ class ShortcutInfo extends ItemInfo {
     /**
      * Title change listener
      */
-    private ShortcutListener mListener;
+    private ArrayList<ShortcutListener> mListeners =
+            new ArrayList<ShortcutListener>();
 
     /**
      * The shortcut folder information
@@ -105,8 +106,8 @@ class ShortcutInfo extends ItemInfo {
 
     public void setIcon(Bitmap b) {
         mIcon = b;
-        if (mListener != null) {
-            mListener.onIconChanged(b);
+        for (ShortcutListener i : mListeners) {
+            i.onIconChanged(this);
         }
     }
 
@@ -140,13 +141,15 @@ class ShortcutInfo extends ItemInfo {
     public void setTitle(CharSequence title) {
         this.title = title;
         this.customTitle = true;
-        if (mListener != null) {
-            mListener.onTitleChanged(title);
+        for (ShortcutListener i : mListeners) {
+            i.onTitleChanged(this);
         }
     }
 
     void setListener(ShortcutListener listener) {
-        mListener = listener;
+        if (!mListeners.contains(listener) && listener != null) {
+            mListeners.add(listener);
+        }
     }
 
     @Override
@@ -198,8 +201,8 @@ class ShortcutInfo extends ItemInfo {
     }
 
     interface ShortcutListener {
-        public void onTitleChanged(CharSequence title);
-        public void onIconChanged(Bitmap icon);
+        public void onTitleChanged(ShortcutInfo item);
+        public void onIconChanged(ShortcutInfo item);
     }
 }
 
