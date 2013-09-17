@@ -162,6 +162,8 @@
     <string name="preferences_interface_gestures_swipe_down_title">Swipe down</string>
     <string name="preferences_interface_gestures_no_action">No action</string>
     <string name="preferences_interface_gestures_open_drawer">Open drawer</string>
+    <string name="preferences_interface_gestures_expand_notifications">Expand notifications *Not Working*</string>
+    <string name="preferences_interface_gestures_expand_quick_settings">Expand quick settings *Not Working*</string>
     <string name="preferences_interface_gestures_preferences">Trebuchet settings</string>
     <string name="preferences_interface_gestures_launch_application">Launch activity</string>
     <string name="preferences_interface_gestures_settings">System settings</string>
