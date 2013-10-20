@@ -1185,7 +1185,7 @@ public class Workspace extends PagedView
         if (updateNow) {
             mWallpaperScrollX = mWallpaperInterpolator.getCurrX();
             mWallpaperScrollY = mWallpaperInterpolator.getCurrY();
-            if (!mWallpaperHack && mWindowToken != null) {
+            if (mWallpaperBitmap == null && mWindowToken != null) {
                 mWallpaperManager.setWallpaperOffsets(mWindowToken, mWallpaperScrollX, mWallpaperScrollY);
             }
         }
