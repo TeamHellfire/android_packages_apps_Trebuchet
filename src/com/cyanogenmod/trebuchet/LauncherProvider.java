@@ -74,7 +74,7 @@ public class LauncherProvider extends ContentProvider {
             "DEFAULT_WORKSPACE_RESOURCE_ID";
 
     private static final String ACTION_APPWIDGET_DEFAULT_WORKSPACE_CONFIGURE =
-            "com.cyanogenmod.trebuchet.action.APPWIDGET_DEFAULT_WORKSPACE_CONFIGURE";
+            "com.android.launcher.action.APPWIDGET_DEFAULT_WORKSPACE_CONFIGURE";
 
     /**
      * {@link Uri} triggered at any registered {@link android.database.ContentObserver} when
@@ -615,6 +615,15 @@ public class LauncherProvider extends ContentProvider {
 
                 final int depth = parser.getDepth();
 
+                LauncherApplication app = ((LauncherApplication) mContext);
+                int cellCountX = app.getResources().getInteger(R.integer.target_cell_count_x);
+                int cellCountY = app.getResources().getInteger(R.integer.target_cell_count_y);
+                int hotseatCellCount = app.getResources().getInteger(R.integer.hotseat_cell_count);
+                final ItemInfo occupied[][][] =
+                        new ItemInfo[Launcher.MAX_SCREEN_COUNT][Math.max(
+                                cellCountX, hotseatCellCount)]
+                                [Math.max(cellCountY, hotseatCellCount)];
+
                 int type;
                 while (((type = parser.next()) != XmlPullParser.END_TAG ||
                         parser.getDepth() > depth) && type != XmlPullParser.END_DOCUMENT) {
@@ -642,6 +651,27 @@ public class LauncherProvider extends ContentProvider {
                     values.put(LauncherSettings.Favorites.SCREEN, screen);
                     values.put(LauncherSettings.Favorites.CELLX, x);
                     values.put(LauncherSettings.Favorites.CELLY, y);
+
+                    ItemInfo info = new ItemInfo();
+                    info.container = container;
+                    info.cellX = values.getAsInteger(LauncherSettings.Favorites.CELLX);
+                    info.cellY = values.getAsInteger(LauncherSettings.Favorites.CELLY);
+                    info.screen = values.getAsInteger(LauncherSettings.Favorites.SCREEN);
+
+                    if (values.containsKey(LauncherSettings.Favorites.SPANX)) {
+                        info.spanX = values.getAsInteger(LauncherSettings.Favorites.SPANX);
+                    } else {
+                        info.spanX = 1;
+                    }
+                    if (values.containsKey(LauncherSettings.Favorites.SPANY)) {
+                        info.spanY = values.getAsInteger(LauncherSettings.Favorites.SPANY);
+                    } else {
+                        info.spanY = 1;
+                    }
+
+                    if (!app.getModel().checkItemPlacement(occupied, info)) {
+                        continue;
+                    }
 
                     if (TAG_FAVORITE.equals(name)) {
                         long id = addAppShortcut(db, values, a, packageManager, intent);
